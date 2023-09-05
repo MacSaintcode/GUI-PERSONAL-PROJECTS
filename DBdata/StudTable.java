@@ -38,8 +38,8 @@ public class StudTable extends JFrame implements ActionListener {
     JTextField Search;
     JComboBox colname;
     JButton Searching;
-    Font font = new Font("Sans Seriff", Font.BOLD, 15);
-    String[] Columns = { "", " FirstName ", " LastName ", " Other Name", " Date Of Birth ", "Gender",
+    Font font = new Font("Comic sans", Font.BOLD, 12);
+    String[] Columns = { " FirstName ", " LastName ", " Other Name", " Date Of Birth ", "Gender",
             "Registeration Number", "Facaulty", "Department", "Matric Number" };
     DefaultTableModel DM = new DefaultTableModel(Columns, 0);
 
@@ -72,6 +72,7 @@ public class StudTable extends JFrame implements ActionListener {
         JTable JT = new JTable(DM);
         JT.setBackground(Color.white);
         JT.setForeground(Color.black);
+        JT.setFont(font);
         JScrollPane scroll = new JScrollPane(JT);
         add(scroll);
         setVisible(true);
@@ -137,7 +138,7 @@ public class StudTable extends JFrame implements ActionListener {
         btn.addActionListener(this);
         return btn;
     }
-
+  
     @Override
     public void actionPerformed(ActionEvent click) {
         String select = (String) colname.getSelectedItem();
@@ -148,7 +149,7 @@ public class StudTable extends JFrame implements ActionListener {
 
             }
             String selectIntoTable = String.format(
-                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where %s=%s",
+                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where '%s'='%s' ",
                     (String) colname.getSelectedItem(), (String) Search.getText());
 
             try {
@@ -167,6 +168,7 @@ public class StudTable extends JFrame implements ActionListener {
                     String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
                             Matric_Number };
                     DM.addRow(tablearr);
+                    
                 }
             } catch (SQLException sqe) {
                 System.out.println(sqe.getMessage());

@@ -1,9 +1,12 @@
+package DBdata;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import javax.swing.JPasswordField;
 
 import java.awt.event.ActionEvent;
@@ -31,23 +34,20 @@ public class login extends JFrame implements ActionListener {
 
 	public login() {
 
-		font = new Font("Ink Free", Font.ITALIC, 30);
-		st2 = Connector.createStatement();
-
-		JPanel northPanel = new JPanel();
-		add(northPanel, BorderLayout.NORTH);
+		font = new Font("Comic Sans", Font.BOLD, 30);
+		st2 = Practice_Connector.createStatement();
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(bgColor);
 		add(centerPanel);
 
-		centerPanel.setLayout(new GridLayout(4, 3));
+		centerPanel.setLayout(new GridLayout(5, 1));
 
-		centerPanel.add(createLabel("User Name:"));
+		centerPanel.add(createLabel("User Name"));
 		userNameField = createTextField();
 		centerPanel.add(userNameField);
 
-		centerPanel.add(createLabel("Password:"));
+		centerPanel.add(createLabel("Password"));
 		passwordField = createPasswordField();
 		centerPanel.add(passwordField);
 
@@ -65,7 +65,7 @@ public class login extends JFrame implements ActionListener {
 		setTitle("LOGIN");
 		setVisible(true);
 		pack();
-		setSize(500, 500);
+		setSize(450, 400);
 		setLocationRelativeTo(null);
 
 	}
@@ -111,9 +111,15 @@ public class login extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == clear) {
+			userNameField.setText("");
+			passwordField.setText("");
+			return;
+
+		}
 		if (e.getSource() == submit) {
 			if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-				JOptionPane.showMessageDialog(null,"username or password field cannot be left blank!!");
+				JOptionPane.showMessageDialog(null, "Field Cannot Be Blank!!");
 				userNameField.setText("");
 				passwordField.setText("");
 				return;
@@ -122,22 +128,18 @@ public class login extends JFrame implements ActionListener {
 			String password = passwordField.getText();
 
 			String query = String.format(
-					"SELECT username, password FROM login where USERNAME = '%s' and password = '%s'", uname, password);
-//        	System.out.println(query);
+					"SELECT username, password FROM administrative where Username = '%s' and password = '%s'", uname,
+					password);
 			try {
 				ResultSet rs = st2.executeQuery(query);
 				if (rs.next()) {
-					System.out.println("Rows Returned");
-					String pwFromDB = rs.getString(2);
-//        			System.out.println("Value is: " + pwFromDB);
-
-					pwFromDB = rs.getString("Password");
-					System.out.println("Value is:" + pwFromDB);
+					String pwFromDB = rs.getString("Password");
 					if (password.equals(pwFromDB))
-						setVisible(false);
+						JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFUL");
 				} else
 					System.out.println("Zero Rows Returned");
 				System.out.println("ResultSet Loaded");
+
 			} catch (SQLException se) {
 				System.out.println("Error occured: " + se.getMessage());
 			}
@@ -147,17 +149,6 @@ public class login extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		new login();
-//        display all users
-		Statement st = Connector.createStatement();
-		try {
-			ResultSet rs = st.executeQuery("SELECT * FROM login");
-			while (rs.next()) {
-				rs.next();
-				System.out.println(rs.getString("Username"));
-			}
-		} catch (SQLException e) {
-			System.out.println("Error occured:" + e.getMessage());
-		}
 
 	}
 

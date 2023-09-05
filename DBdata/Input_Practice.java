@@ -23,11 +23,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import java.util.Objects;
 
 public class Input_Practice extends JFrame implements ActionListener, ItemListener, WindowListener {
 
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
-    Font font = new Font("Sans Seriff", Font.BOLD, 30);
+    Font font = new Font("Comic sans", Font.BOLD, 30);
     JTextField firstnamefield, lastnamefield, Other_Names, Date_Of_Birth, Reg_num, Phone_Number;
     JButton submit, reset;
     JRadioButton male, female;
@@ -40,7 +41,6 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
         JPanel centerpanel = new JPanel();
         centerpanel.setBackground(bgcolor);
         add(centerpanel);
-        
 
         GridLayout gl = new GridLayout(6, 2);
         gl.setVgap(10);
@@ -96,9 +96,9 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
         reset = createbutton("RESET");
         southpanel.add(reset);
+
         submit = createbutton("SUBMIT");
         southpanel.add(submit);
-        submit.addActionListener(this);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("DETAILS MENU");
@@ -136,26 +136,17 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     }
 
     JButton createbutton(String txt) {
-        JButton btn = new JButton(txt);
-        btn.setFont(font);
-        btn.setForeground(fgcolor);
-        btn.setBackground(bgcolor);
-        btn.setFocusable(false);
-        btn.addActionListener(this);
-        return btn;
-    }
-
-    JOptionPane jopt(String txt) {
-        JOptionPane btn = new JOptionPane();
-        btn.showMessageDialog(null, txt);
-        btn.setFont(font);
-
-        return btn;
+        JButton btnr = new JButton(txt);
+        btnr.setFont(font);
+        btnr.setForeground(fgcolor);
+        btnr.setBackground(bgcolor);
+        btnr.setFocusable(false);
+        btnr.addActionListener(this);
+        return btnr;
     }
 
     @Override
-    public void itemStateChanged(ItemEvent e) {
-
+    public void itemStateChanged(ItemEvent ea) {
         if (male.isSelected()) {
             Gender = "Male";
         } else if (female.isSelected()) {
@@ -166,22 +157,21 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == reset) {
+    public void actionPerformed(ActionEvent eo) {
+        if (eo.getSource() == reset) {
 
             firstnamefield.setText("");
             lastnamefield.setText("");
+            Other_Names.setText("");
             Date_Of_Birth.setText("YYYY-MM-DD");
             Reg_num.setText("");
             male.setSelected(true);
             Gender = null;
 
-        } else if (e.getSource() == submit) {
-            
-
+        } else if (eo.getSource() == submit) {
             if (firstnamefield.getText().isEmpty() || lastnamefield.getText()
                     .isEmpty() || Date_Of_Birth.getText().isEmpty() || Gender == null || Reg_num.getText().isEmpty()) {
-                jopt("FIELD CANNOT BE EMPTY!");
+                JOptionPane.showMessageDialog(null, "FIELD CANNOT BE EMPTY!");
                 return;
             }
 
@@ -191,7 +181,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
             Boolean res = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", Date_Of_Birth.getText());
             if (res == false) {
-                jopt("INCORRECT DATE FORMAT");
+                JOptionPane.showMessageDialog(null, "INCORRECT DATE FORMAT");
                 Date_Of_Birth.setText("YYYY-MM-DD");
                 return;
             }
@@ -204,25 +194,9 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                     match = rs.getString("Registration_Number");
 
                     if (((String) Reg_num.getText()).equalsIgnoreCase(match)) {
-                        selectIntoTable1 = String.format(
-                                "SELECT lastname FROM register where Registration_Number = '%s' ", Reg_num.getText());
-
-                        rs = st2.executeQuery(selectIntoTable1);
-                        while (rs.next()) {
-                            matches = rs.getString("Lastname");
-                            jopt("YOU HAVE BEEN REGISTERED " + matches.toUpperCase() + "!");
-                            firstnamefield.setText("");
-                            lastnamefield.setText("");
-                            Date_Of_Birth.setText("YYYY-MM-DD");
-                        
-                            Other_Names.setText("");
-                            Reg_num.setText("");
-                            return;
-                        }
-                    } else if (rs.isLast()) {
-                        break;
-                    } else {
-                        continue;
+                        JOptionPane.showMessageDialog(null,
+                                "THIS REGISTRATION NUMBER HAS BEEN ASSIGNED TO ANOTHER STUDENT!");
+                        return;
                     }
                 }
             } catch (SQLException ex) {
@@ -233,7 +207,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                     firstnamefield.getText(), lastnamefield.getText(), Other_Names.getText(), Date_Of_Birth.getText(),
                     Gender,
                     Reg_num.getText());
-                
+
             try {
                 st2.execute(InputQuery);
                 System.out.println("Query Executed Sucessfully");
@@ -243,11 +217,12 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 Other_Names.setText("");
                 male.setSelected(true);
                 Reg_num.setText("");
+                dispose();
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
 
             } catch (NullPointerException po) {
-                jopt("Server Not Online Please Rectify it!");
+                JOptionPane.showMessageDialog(null, "Server Not Online Please Rectify it!");
                 System.exit(0);
             }
 
@@ -257,7 +232,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     @Override
     public void windowOpened(WindowEvent e) {
-
+        System.out.println("Registration portal Opened");
     }
 
     @Override
@@ -267,7 +242,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     @Override
     public void windowClosed(WindowEvent e) {
-
+        JOptionPane.showMessageDialog(null, "PROCEED WITH REGISTRATION");
         new EnterPassword();
     }
 
@@ -277,6 +252,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     @Override
     public void windowDeiconified(WindowEvent e) {
+
     }
 
     @Override
@@ -285,6 +261,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     @Override
     public void windowDeactivated(WindowEvent e) {
+
     }
 
     public static void main(String[] args) {

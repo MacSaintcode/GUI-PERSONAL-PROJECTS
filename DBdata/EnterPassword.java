@@ -25,13 +25,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class EnterPassword extends JFrame implements ActionListener, ItemListener {
+public class EnterPassword extends JFrame implements ActionListener, ItemListener, WindowListener {
 
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     JButton reset, submit;
     JTextField Reg_num;
     JComboBox<String> department, faculty;
-    Font font = new Font("Sans Seriff", Font.BOLD, 20);
+    Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
 
     EnterPassword() {
@@ -67,9 +67,10 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
 
         submit = createbutton("Submit");
         southpanel.add(submit);
+        addWindowListener(this);
 
         generate();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Registeration");
         pack();
         setSize(500, 300);
@@ -119,8 +120,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == reset) {
             Reg_num.setText("");
-            department.setSelectedItem("");
-            faculty.setSelectedItem("CHOSSE A FACAULTY");
+            faculty.setSelectedItem("CHOOSE A FACAULTY");
             return;
 
         } else if (e.getSource() == submit) {
@@ -132,27 +132,40 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             }
 
             String selectIntoTable1 = String.format("SELECT Registration_Number FROM Identity");
+            String selectIntoTable = String.format("SELECT Registration_Number FROM register");
             String match, matches;
+            Boolean got = false;
             ResultSet rs;
             try {
+                rs = st2.executeQuery(selectIntoTable);
+                while (rs.next()) {
+                    matches = rs.getString("Registration_Number");
+                    System.out.println(matches);
+                    if ((Reg_num.getText()).equalsIgnoreCase(matches)) {
+                        got = true;
+                        break;
+                    }
+                }
+                if (got.equals(false)) {
+                    JOptionPane.showMessageDialog(null, "THIS REGISTRATION NUMBER HAS NOT BEEN REGISTERED!");
+                    Reg_num.setText("");
+                    department.setSelectedItem("");
+                    faculty.setSelectedItem("CHOOSE A FACAULTY");
+                    return;
+
+                }
                 rs = st2.executeQuery(selectIntoTable1);
                 while (rs.next()) {
                     match = rs.getString("Registration_Number");
-                    if (((String) Reg_num.getText()).equalsIgnoreCase(match)) {
-                        selectIntoTable1 = String.format(
-                                "SELECT lastname FROM register where Registration_Number = '%s' ", Reg_num.getText());
-                        rs = st2.executeQuery(selectIntoTable1);
-                        while (rs.next()) {
-                            matches = rs.getString("Lastname");
-                            JOptionPane.showMessageDialog(null, "YOU HAVE BEEN REGISTERED " + matches.toUpperCase() + "!");
-                            Reg_num.setText("");
-                            return;
-                        }
-                    } else if (rs.isLast()) {
-                        break;
-                    } else {
-                        continue;
+
+                    if (( Reg_num.getText()).equalsIgnoreCase(match)) {
+                        JOptionPane.showMessageDialog(null,
+                                "THIS REGISTRATION NUMBER OWNER HAS COMPLETED THE REGISTRATION PROCESS!");
+                        Reg_num.setText("");
+                        faculty.setSelectedItem("CHOOSE A FACAULTY");
+                        return;
                     }
+
                 }
             } catch (SQLException ex) {
                 System.out.println("Error occured....." + ex.getMessage() + "\tQuery has been terminated");
@@ -161,7 +174,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             String InputQuery = String.format("INSERT INTO identity VALUES('%s','%s','%s','%s')",
                     Reg_num.getText(), null, (String) faculty.getSelectedItem(), (String) department.getSelectedItem());
 
-            String selectIntoTable = String.format("SELECT Matric_Number FROM Identity");
+            selectIntoTable = String.format("SELECT Matric_Number FROM Identity");
 
             String matric = null;
             String matrics = null;
@@ -187,10 +200,6 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                         if (matrics.equalsIgnoreCase(matric)) {
                             res = true;
                             break;
-                        } else if (rs.isLast()) {
-                            break;
-                        } else {
-                            continue;
                         }
 
                     }
@@ -200,6 +209,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                         continue;
                     }
                 }
+
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
             }
@@ -215,8 +225,8 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 JOptionPane.showMessageDialog(null, "Your Matric Number is" + matric);
                 System.out.println("Query Executed Sucessfully");
                 Reg_num.setText("");
-                department.setSelectedItem("");
-                faculty.setSelectedItem("");
+                faculty.setSelectedItem("CHOOSE A FACAULTY");
+                dispose();
                 return;
 
             } catch (SQLException sq) {
@@ -252,8 +262,10 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
 
         department.removeAllItems();
         if (select.equalsIgnoreCase("CHOOSE A FACAULTY")) {
+            department.addItem("");
 
         } else {
+            department.removeAllItems();
             String selectIntoTable = String.format("SELECT %s FROM department", select);
             try {
                 ResultSet rs = st2.executeQuery(selectIntoTable);
@@ -265,6 +277,43 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 System.out.println(sqe.getMessage());
             }
         }
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent args) {
+        JOptionPane.showMessageDialog(null, "Registration Complete!!");
+        new Input_Practice();
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+
     }
 
     public static void main(String[] args) {
