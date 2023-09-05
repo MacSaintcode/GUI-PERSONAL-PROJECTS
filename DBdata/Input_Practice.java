@@ -1,0 +1,294 @@
+package DBdata;
+
+//import DBdata.EnterPassword;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.regex.Pattern;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+public class Input_Practice extends JFrame implements ActionListener, ItemListener, WindowListener {
+
+    Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
+    Font font = new Font("Sans Seriff", Font.BOLD, 30);
+    JTextField firstnamefield, lastnamefield, Other_Names, Date_Of_Birth, Reg_num, Phone_Number;
+    JButton submit, reset;
+    JRadioButton male, female;
+    String Gender = "Male";
+    Statement st2;
+
+    public Input_Practice() {
+        st2 = Practice_Connector.createStatement();
+
+        JPanel centerpanel = new JPanel();
+        centerpanel.setBackground(bgcolor);
+        add(centerpanel);
+        
+
+        GridLayout gl = new GridLayout(6, 2);
+        gl.setVgap(10);
+        centerpanel.setLayout(gl);
+
+        centerpanel.add(createLabel("Firstname*"));
+        firstnamefield = createtextfield();
+        centerpanel.add(firstnamefield);
+
+        centerpanel.add(createLabel("Lastname*"));
+        lastnamefield = createtextfield();
+        centerpanel.add(lastnamefield);
+
+        centerpanel.add(createLabel(" Other Names"));
+        Other_Names = createtextfield();
+        centerpanel.add(Other_Names);
+
+        centerpanel.add(createLabel("Date Of Birth*"));
+        Date_Of_Birth = createtextfield();
+        Date_Of_Birth.setText("YYYY-MM-DD");
+        centerpanel.add(Date_Of_Birth);
+
+        centerpanel.add(createLabel("Reg Number*"));
+        Reg_num = createtextfield();
+        centerpanel.add(Reg_num);
+
+        JPanel genderpane = new JPanel();
+        genderpane.setBackground(bgcolor);
+
+        male = createradiobutton("Male");
+        female = createradiobutton("Female");
+
+        male.setSelected(true);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(male);
+        group.add(female);
+
+        genderpane.add(male);
+        genderpane.add(female);
+
+        centerpanel.add(createLabel("Gender*"));
+        centerpanel.add(genderpane);
+
+        male.addItemListener(this);
+        female.addItemListener(this);
+        addWindowListener(this);
+
+        JPanel southpanel = new JPanel();
+        southpanel.setBackground(Color.DARK_GRAY);
+
+        add(southpanel, BorderLayout.SOUTH);
+
+        reset = createbutton("RESET");
+        southpanel.add(reset);
+        submit = createbutton("SUBMIT");
+        southpanel.add(submit);
+        submit.addActionListener(this);
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setTitle("DETAILS MENU");
+        pack();
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    JRadioButton createradiobutton(String txt) {
+        JRadioButton btn = new JRadioButton(txt);
+        btn.setFont(font);
+        btn.setBackground(bgcolor);
+        btn.setForeground(fgcolor);
+        btn.setFocusable(false);
+        return btn;
+
+    }
+
+    JTextField createtextfield() {
+        JTextField txtfield = new JTextField(50);
+        txtfield.setFont(font);
+        txtfield.setBackground(bgcolor);
+        txtfield.setForeground(fgcolor);
+        txtfield.setCaretColor(Color.yellow);
+        return txtfield;
+    }
+
+    JLabel createLabel(String txt) {
+        JLabel label = new JLabel(txt);
+        label.setFont(font);
+        label.setForeground(fgcolor);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
+    }
+
+    JButton createbutton(String txt) {
+        JButton btn = new JButton(txt);
+        btn.setFont(font);
+        btn.setForeground(fgcolor);
+        btn.setBackground(bgcolor);
+        btn.setFocusable(false);
+        btn.addActionListener(this);
+        return btn;
+    }
+
+    JOptionPane jopt(String txt) {
+        JOptionPane btn = new JOptionPane();
+        btn.showMessageDialog(null, txt);
+        btn.setFont(font);
+
+        return btn;
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+
+        if (male.isSelected()) {
+            Gender = "Male";
+        } else if (female.isSelected()) {
+            Gender = "Female";
+        } else {
+            Gender = null;
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == reset) {
+
+            firstnamefield.setText("");
+            lastnamefield.setText("");
+            Date_Of_Birth.setText("YYYY-MM-DD");
+            Reg_num.setText("");
+            male.setSelected(true);
+            Gender = null;
+
+        } else if (e.getSource() == submit) {
+            
+
+            if (firstnamefield.getText().isEmpty() || lastnamefield.getText()
+                    .isEmpty() || Date_Of_Birth.getText().isEmpty() || Gender == null || Reg_num.getText().isEmpty()) {
+                jopt("FIELD CANNOT BE EMPTY!");
+                return;
+            }
+
+            if (Other_Names.getText().isEmpty()) {
+                Other_Names = null;
+            }
+
+            Boolean res = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", Date_Of_Birth.getText());
+            if (res == false) {
+                jopt("INCORRECT DATE FORMAT");
+                Date_Of_Birth.setText("YYYY-MM-DD");
+                return;
+            }
+            String selectIntoTable1 = String.format("SELECT Registration_Number FROM register");
+            String match, matches;
+            ResultSet rs;
+            try {
+                rs = st2.executeQuery(selectIntoTable1);
+                while (rs.next()) {
+                    match = rs.getString("Registration_Number");
+
+                    if (((String) Reg_num.getText()).equalsIgnoreCase(match)) {
+                        selectIntoTable1 = String.format(
+                                "SELECT lastname FROM register where Registration_Number = '%s' ", Reg_num.getText());
+
+                        rs = st2.executeQuery(selectIntoTable1);
+                        while (rs.next()) {
+                            matches = rs.getString("Lastname");
+                            jopt("YOU HAVE BEEN REGISTERED " + matches.toUpperCase() + "!");
+                            firstnamefield.setText("");
+                            lastnamefield.setText("");
+                            Date_Of_Birth.setText("YYYY-MM-DD");
+                        
+                            Other_Names.setText("");
+                            Reg_num.setText("");
+                            return;
+                        }
+                    } else if (rs.isLast()) {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error occured....." + ex.getMessage() + "\tQuery has been terminated");
+            }
+
+            String InputQuery = String.format("INSERT INTO Register VALUES('%s','%s','%s','%s','%s','%s')",
+                    firstnamefield.getText(), lastnamefield.getText(), Other_Names.getText(), Date_Of_Birth.getText(),
+                    Gender,
+                    Reg_num.getText());
+                
+            try {
+                st2.execute(InputQuery);
+                System.out.println("Query Executed Sucessfully");
+                firstnamefield.setText("");
+                lastnamefield.setText("");
+                Date_Of_Birth.setText("YYYY-MM-DD");
+                Other_Names.setText("");
+                male.setSelected(true);
+                Reg_num.setText("");
+            } catch (SQLException sq) {
+                System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
+
+            } catch (NullPointerException po) {
+                jopt("Server Not Online Please Rectify it!");
+                System.exit(0);
+            }
+
+        }
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+        new EnterPassword();
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+    }
+
+    public static void main(String[] args) {
+        new Input_Practice();
+
+    }
+}
