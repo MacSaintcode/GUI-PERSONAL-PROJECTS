@@ -120,6 +120,11 @@ public class login extends JFrame implements ActionListener {
 			return;
 
 		}
+		if (e.getSource() == Forgot) {
+
+			return;
+
+		}
 		if (e.getSource() == submit) {
 			if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Field Cannot Be Blank!!");
