@@ -68,7 +68,7 @@ public class login extends JFrame implements ActionListener {
 		setTitle("LOGIN");
 		setVisible(true);
 		pack();
-		setSize(450, 400);
+		setSize(600, 450);
 		setLocationRelativeTo(null);
 
 	}
