@@ -121,9 +121,8 @@ public class login extends JFrame implements ActionListener {
 
 		}
 		if (e.getSource() == Forgot) {
-
-			return;
-
+			new changepassword();
+			dispose();
 		}
 		if (e.getSource() == submit) {
 			if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
