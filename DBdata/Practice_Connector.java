@@ -58,8 +58,8 @@ public class Practice_Connector {
             System.out.println("Query executed");
         } catch (SQLException e) {
             System.out.println("Error occured: " + e.getMessage());
-            // JOptionPane.showMessageDialog(null, "Server Error!");
-            // System.exit(0);
+            JOptionPane.showMessageDialog(null, "Server Error!");
+            System.exit(0);
         }
         return st2;
     }

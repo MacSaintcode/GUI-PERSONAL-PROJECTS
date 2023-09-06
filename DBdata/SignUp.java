@@ -40,7 +40,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     JPasswordField passwordField, ConfirmpasswordField;
     JButton submit, clear;
     JRadioButton male, female;
-    String status;
+    String status, tick = "";
     Statement st2;
 
     public SignUp() {
@@ -115,7 +115,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         submit = createButton("Sign up");
         southPanel.add(submit);
 
-
+        addWindowListener(this);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Sign Up");
         setVisible(true);
@@ -248,6 +248,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
 
                 }
                 insert();
+                tick = "done";
                 dispose();
 
             } catch (SQLException e1) {
@@ -281,8 +282,12 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        JOptionPane.showMessageDialog(null, "Login Your Account");
-        new login();
+        if (tick.equalsIgnoreCase("done")) {
+            JOptionPane.showMessageDialog(null, "Login Your Account");
+            new login();
+        } else {
+            System.out.println("GUI TERMINATED!");
+        }
 
     }
 

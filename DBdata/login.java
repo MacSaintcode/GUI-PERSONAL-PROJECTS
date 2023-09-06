@@ -11,6 +11,8 @@ import javax.swing.JPasswordField;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +24,7 @@ import java.awt.GridLayout;
 
 import java.sql.Connection;
 
-public class login extends JFrame implements ActionListener {
+public class login extends JFrame implements ActionListener, WindowListener {
 
 	Color fgColor = Color.YELLOW, bgColor = Color.BLACK;
 	Font font;
@@ -30,6 +32,7 @@ public class login extends JFrame implements ActionListener {
 	JTextField userNameField;
 	JPasswordField passwordField;
 	JButton submit, clear, Forgot;
+	String tick = "";
 	Statement st2;
 
 	public login() {
@@ -64,6 +67,7 @@ public class login extends JFrame implements ActionListener {
 		submit = createButton("Submit");
 		southPanel.add(submit);
 
+		addWindowListener(this);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("LOGIN");
 		setVisible(true);
@@ -121,7 +125,8 @@ public class login extends JFrame implements ActionListener {
 
 		}
 		if (e.getSource() == Forgot) {
-			new changepassword();
+			tick = "forgot";
+
 			dispose();
 		}
 		if (e.getSource() == submit) {
@@ -142,7 +147,8 @@ public class login extends JFrame implements ActionListener {
 				if (rs.next()) {
 					String pwFromDB = rs.getString("Password");
 					if (password.equals(pwFromDB))
-						JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFUL");
+						tick = "done";
+					dispose();
 				} else
 					System.out.println("Zero Rows Returned");
 				System.out.println("ResultSet Loaded");
@@ -156,6 +162,47 @@ public class login extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		new login();
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		if (tick.equalsIgnoreCase("done")) {
+			JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFUL");
+			System.exit(0);
+		} else if (tick.equalsIgnoreCase("forgot")) {
+			new changepassword();
+		}
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
 
 	}
 

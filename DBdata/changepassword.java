@@ -6,15 +6,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.regex.Pattern;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import java.util.Objects;
 
 public class changepassword extends JFrame implements ActionListener, WindowListener {
 
@@ -31,6 +27,7 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     JTextField Phone_Number, Username;
     JPasswordField Password, cPassword;
     JButton submit, reset;
+    String tick = "";
     Statement st2;
 
     changepassword() {
@@ -71,8 +68,9 @@ public class changepassword extends JFrame implements ActionListener, WindowList
 
         submit = createbutton("SUBMIT");
         southpanel.add(submit);
+        addWindowListener(this);
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Password Update");
         pack();
         setSize(600, 350);
@@ -162,7 +160,8 @@ public class changepassword extends JFrame implements ActionListener, WindowList
 
                     if (((String) Phone_Number.getText()).equalsIgnoreCase(match)
                             && Username.getText().equals(matches)) {
-
+                        got = true;
+                        tick = "done";
                         dispose();
                     }
                 }
@@ -193,10 +192,16 @@ public class changepassword extends JFrame implements ActionListener, WindowList
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        PinEntry call = new PinEntry();
-        call.User = Username.getText();
-        call.phone = Phone_Number.getText();
-        call.pass=Password.getText();
+        if (tick.equalsIgnoreCase("done")) {
+            PinEntry call = new PinEntry();
+            call.User = Username.getText();
+            call.phone = Phone_Number.getText();
+            call.pass = Password.getText();
+        }else{
+            System.err.println("Password Unchanged!");
+            new login();
+        }
+
     }
 
     @Override

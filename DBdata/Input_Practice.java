@@ -32,7 +32,8 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     JTextField firstnamefield, lastnamefield, Other_Names, Date_Of_Birth, Reg_num, Phone_Number;
     JButton submit, reset;
     JRadioButton male, female;
-    String Gender = "Male";
+    String tick="", Gender = "Male";
+
     Statement st2;
 
     public Input_Practice() {
@@ -217,6 +218,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 Other_Names.setText("");
                 male.setSelected(true);
                 Reg_num.setText("");
+                tick = "done";
                 dispose();
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
@@ -242,8 +244,13 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     @Override
     public void windowClosed(WindowEvent e) {
-        JOptionPane.showMessageDialog(null, "PROCEED WITH REGISTRATION");
-        new EnterPassword();
+        if (tick.equalsIgnoreCase("done")) {
+            JOptionPane.showMessageDialog(null, "PROCEED WITH REGISTRATION");
+            new EnterPassword();
+        }else{
+            System.err.println("GUI TERMINATED!");
+        }
+
     }
 
     @Override

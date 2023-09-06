@@ -32,6 +32,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     JTextField Reg_num;
     JComboBox<String> department, faculty;
     Font font = new Font("Comic sans", Font.BOLD, 20);
+    String tick = "";
     Statement st2;
 
     EnterPassword() {
@@ -67,10 +68,11 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
 
         submit = createbutton("Submit");
         southpanel.add(submit);
+
         addWindowListener(this);
 
         generate();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Registeration");
         pack();
         setSize(500, 300);
@@ -158,7 +160,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 while (rs.next()) {
                     match = rs.getString("Registration_Number");
 
-                    if (( Reg_num.getText()).equalsIgnoreCase(match)) {
+                    if ((Reg_num.getText()).equalsIgnoreCase(match)) {
                         JOptionPane.showMessageDialog(null,
                                 "THIS REGISTRATION NUMBER OWNER HAS COMPLETED THE REGISTRATION PROCESS!");
                         Reg_num.setText("");
@@ -226,6 +228,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 System.out.println("Query Executed Sucessfully");
                 Reg_num.setText("");
                 faculty.setSelectedItem("CHOOSE A FACAULTY");
+                tick = "done";
                 dispose();
                 return;
 
@@ -286,8 +289,13 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
 
     @Override
     public void windowClosed(WindowEvent args) {
-        JOptionPane.showMessageDialog(null, "Registration Complete!!");
-        new Input_Practice();
+        if (tick.equalsIgnoreCase("done")) {
+            JOptionPane.showMessageDialog(null, "Registration Complete!");
+            new Input_Practice();
+        } else {
+            JOptionPane.showMessageDialog(null, "Registration Terminated!");
+            new Input_Practice();
+        }
 
     }
 
