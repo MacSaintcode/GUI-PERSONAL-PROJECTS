@@ -143,6 +143,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
                 if (!gotpin.equals(pin.getText())) {
                     st2.execute(selectIntoTable2);
+                    
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "INVALID PIN!");
