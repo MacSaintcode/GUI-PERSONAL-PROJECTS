@@ -26,7 +26,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     JButton reset, submit;
     JTextField pin;
-    String User;
+    String User, phone, pass;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
 
@@ -94,10 +94,9 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     void Generatepin() {
         System.out.println(User);
 
-
         Random rand = new Random();
         int my_pin = rand.nextInt(100000, 999999);
-        String putpin = String.format("insert into acess ('%s','%s')",User, my_pin);
+        String putpin = String.format("insert into acess ('%s','%s')", User, my_pin);
         ResultSet rs;
 
         try {
@@ -119,7 +118,6 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
             pin.setText("");
 
         } else if (e.getSource() == submit) {
-            // changepassword getin = new changepassword();
 
             if (pin.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Field Cannot Be Blank!");
@@ -133,19 +131,26 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
                 return;
 
             }
-            String getpin = String.format("select Administrative_Pin from acess where Username='%s'");
+            String getpin = String.format("select Administrative_Pin from acess where Username='%s'", User);
             ResultSet rs;
             String gotpin;
+            String selectIntoTable2 = String.format(
+                    "Update Table Aministrative set password='%s' where Phone_Number='%s'and Username='%s' ",
+                    pass, phone, User);
             try {
                 rs = st2.executeQuery(getpin);
                 gotpin = rs.getString("Administrative_Pin");
 
                 if (!gotpin.equals(pin.getText())) {
+                    st2.execute(selectIntoTable2);
+                    dispose();
+                } else {
                     JOptionPane.showMessageDialog(null, "INVALID PIN!");
                     pin.setText("");
                     return;
+
                 }
-                dispose();
+
             } catch (SQLException ea) {
                 System.err.println("Query Terminated " + ea.getMessage());
             }

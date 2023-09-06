@@ -162,8 +162,8 @@ public class changepassword extends JFrame implements ActionListener, WindowList
 
                     if (((String) Phone_Number.getText()).equalsIgnoreCase(match)
                             && Username.getText().equals(matches)) {
-                        got = true;
-                        break;
+
+                        dispose();
                     }
                 }
                 if (got.equals(false)) {
@@ -174,7 +174,7 @@ public class changepassword extends JFrame implements ActionListener, WindowList
                     Username.setText("");
                     return;
                 }
-                dispose();
+
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
             }
@@ -193,13 +193,14 @@ public class changepassword extends JFrame implements ActionListener, WindowList
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-
+        PinEntry call = new PinEntry();
+        call.User = Username.getText();
+        call.phone = Phone_Number.getText();
+        call.pass=Password.getText();
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-        PinEntry call = new PinEntry();
-        call.User = Username.getText();
 
     }
 
