@@ -29,7 +29,7 @@ public class login extends JFrame implements ActionListener {
 
 	JTextField userNameField;
 	JPasswordField passwordField;
-	JButton submit, clear;
+	JButton submit, clear,Forgot;
 	Statement st2;
 
 	public login() {
@@ -61,7 +61,10 @@ public class login extends JFrame implements ActionListener {
 		submit = createButton("Submit");
 		southPanel.add(submit);
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Forgot = createButton("Forgot password");
+		southPanel.add(Forgot);
+
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("LOGIN");
 		setVisible(true);
 		pack();

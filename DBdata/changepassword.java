@@ -24,7 +24,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import java.util.Objects;
 
-public class changepassword extends JFrame implements ActionListener {
+public class changepassword extends JFrame implements ActionListener, WindowListener {
 
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     Font font = new Font("Comic sans", Font.BOLD, 30);
@@ -125,19 +125,18 @@ public class changepassword extends JFrame implements ActionListener {
             cPassword.setText("");
             Phone_Number.setText("");
             Username.setText("");
-            // setVisible(false);
             return;
 
         } else if (es.getSource() == submit) {
 
             if (Username.getText().isEmpty() || Phone_Number.getText().isEmpty()
                     || cPassword.getText().isEmpty() || Password.getText().isEmpty()) {
-                // JOptionPane.showMessageDialog(null, "Field cannot be Blank!");
-                System.out.println("jhkbvjhn");
+                JOptionPane.showMessageDialog(null, "Field cannot be Blank!");
+
                 return;
 
             }
-            Boolean res = Pattern.matches("\\+234||0[7-9][0-1][0-9]{8}", Phone_Number.getText());
+            Boolean res = Pattern.matches("(0||\\+234)[7-9][01]\\d{8}", Phone_Number.getText());
             if (res == false) {
                 JOptionPane.showMessageDialog(null, "INCORRECT PHONE NUMBER!");
                 return;
@@ -175,6 +174,7 @@ public class changepassword extends JFrame implements ActionListener {
                     Username.setText("");
                     return;
                 }
+                dispose();
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
             }
@@ -184,5 +184,42 @@ public class changepassword extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         new changepassword();
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+        PinEntry call = new PinEntry();
+        call.User = Username.getText();
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+
     }
 }

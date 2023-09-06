@@ -99,9 +99,11 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         ButtonGroup group = new ButtonGroup();
         group.add(male);
         group.add(female);
-        male.setSelected(true);
+
         male.addItemListener(this);
         female.addItemListener(this);
+
+        male.setSelected(true);
 
         JPanel southPanel = new JPanel();
         southPanel.setBackground(Color.BLUE);
@@ -113,7 +115,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         submit = createButton("Sign up");
         southPanel.add(submit);
 
-        // adminpin();
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Sign Up");
         setVisible(true);
@@ -172,23 +174,6 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         return label;
     }
 
-    void adminpin() {
-        Random rand = new Random();
-        int addpin = rand.nextInt(100000, 999999);
-        System.out.println(addpin);
-        String insertval = String.format("insert into acess values(%s,%s)", firstnameField.getText(), addpin);
-        ResultSet rs;
-        try {
-            rs = st2.executeQuery(insertval);
-            System.out.println("Query Executed!");
-            System.out.println("YOUR PIN HAS BEEN GENERATED");
-
-        } catch (SQLException sq) {
-
-        }
-
-    }
-
     void insert() {
         ResultSet rs;
         try {
@@ -227,16 +212,16 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                 JOptionPane.showMessageDialog(null, "Field Cannot Be Empty!");
                 return;
             }
+
+            Boolean res = Pattern.matches("(0||\\+234)[7-9][01]\\d{8}", Phone_Number.getText());
+            if (res == false) {
+                JOptionPane.showMessageDialog(null, "INCORRECT PHONE NUMBER!");
+                return;
+            }
             if (!ConfirmpasswordField.getText().equals(passwordField.getText())) {
                 JOptionPane.showMessageDialog(null, "Passwors does not match!!");
                 passwordField.setText("");
                 ConfirmpasswordField.setText("");
-                return;
-            }
-
-            Boolean res = Pattern.matches("\\+234||0[7-9][0-1][0-9]{8}", Phone_Number.getText());
-            if (res == false) {
-                JOptionPane.showMessageDialog(null, "INCORRECT PHONE NUMBER!");
                 return;
             }
 
@@ -262,8 +247,9 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                     }
 
                 }
+                insert();
                 dispose();
-                // insert();
+
             } catch (SQLException e1) {
                 System.out.println("Error occured..." + e1.getMessage());
             }

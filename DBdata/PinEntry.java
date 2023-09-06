@@ -26,6 +26,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     JButton reset, submit;
     JTextField pin;
+    String User;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
 
@@ -91,11 +92,12 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     }
 
     void Generatepin() {
+        System.out.println(User);
 
 
         Random rand = new Random();
         int my_pin = rand.nextInt(100000, 999999);
-        String putpin = String.format("insert into acess ('%s','%s')", my_pin);
+        String putpin = String.format("insert into acess ('%s','%s')",User, my_pin);
         ResultSet rs;
 
         try {
@@ -158,7 +160,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        JOptionPane.showMessageDialog(null, "You Have Been Given Administrative Priviledges");
+        JOptionPane.showMessageDialog(null, "Password Changed!");
         new login();
 
     }
