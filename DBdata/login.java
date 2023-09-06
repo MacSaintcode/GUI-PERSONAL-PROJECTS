@@ -29,7 +29,7 @@ public class login extends JFrame implements ActionListener {
 
 	JTextField userNameField;
 	JPasswordField passwordField;
-	JButton submit, clear,Forgot;
+	JButton submit, clear, Forgot;
 	Statement st2;
 
 	public login() {
@@ -55,14 +55,14 @@ public class login extends JFrame implements ActionListener {
 		southPanel.setBackground(Color.BLUE);
 		add(southPanel, BorderLayout.SOUTH);
 
+		Forgot = createButton("Forgot password");
+		southPanel.add(Forgot);
+
 		clear = createButton("Reset");
 		southPanel.add(clear);
 
 		submit = createButton("Submit");
 		southPanel.add(submit);
-
-		Forgot = createButton("Forgot password");
-		southPanel.add(Forgot);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("LOGIN");
