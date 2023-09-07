@@ -186,6 +186,11 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 Date_Of_Birth.setText("YYYY-MM-DD");
                 return;
             }
+            if (!(Reg_num.getText().length()==8)) {
+                JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
+                Reg_num.setText("");
+                return;
+            }
             String selectIntoTable1 = String.format("SELECT Registration_Number FROM register");
             String match, matches;
             ResultSet rs;

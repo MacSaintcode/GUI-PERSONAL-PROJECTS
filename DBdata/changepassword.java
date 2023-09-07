@@ -27,7 +27,7 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     JTextField Phone_Number, Username;
     JPasswordField Password, cPassword;
     JButton submit, reset;
-    String tick = "";
+    String tick = "", pass, User, phone;
     Statement st2;
 
     changepassword() {
@@ -162,6 +162,9 @@ public class changepassword extends JFrame implements ActionListener, WindowList
                             && Username.getText().equals(matches)) {
                         got = true;
                         tick = "done";
+                        User = Username.getText();
+                        phone = Phone_Number.getText();
+                        pass = Password.getText();
                         dispose();
                     }
                 }
@@ -193,11 +196,9 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            PinEntry call = new PinEntry();
-            call.User = Username.getText();
-            call.phone = Phone_Number.getText();
-            call.pass = Password.getText();
-        }else{
+            PinEntry call = new PinEntry(User, phone, pass);
+
+        } else {
             System.err.println("Password Unchanged!");
             new login();
         }

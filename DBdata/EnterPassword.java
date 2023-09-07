@@ -132,6 +132,11 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 return;
 
             }
+            if (!(Reg_num.getText().length() == 8)) {
+                JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
+                Reg_num.setText("");
+                return;
+            }
 
             String selectIntoTable1 = String.format("SELECT Registration_Number FROM Identity");
             String selectIntoTable = String.format("SELECT Registration_Number FROM register");
@@ -142,7 +147,6 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 rs = st2.executeQuery(selectIntoTable);
                 while (rs.next()) {
                     matches = rs.getString("Registration_Number");
-                    System.out.println(matches);
                     if ((Reg_num.getText()).equalsIgnoreCase(matches)) {
                         got = true;
                         break;
@@ -247,7 +251,6 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             ResultSet rs = st2.executeQuery(selectIntoTable);
             while (rs.next()) {
                 gots = rs.getString("Facaultyname");
-                System.out.println(gots);
                 faculty.addItem(gots);
             }
             System.out.println("Completed");

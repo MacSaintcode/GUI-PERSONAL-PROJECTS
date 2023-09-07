@@ -149,10 +149,12 @@ public class login extends JFrame implements ActionListener, WindowListener {
 					if (password.equals(pwFromDB))
 						tick = "done";
 					dispose();
-				} else
-					System.out.println("Zero Rows Returned");
-				System.out.println("ResultSet Loaded");
-
+				} else {
+					JOptionPane.showMessageDialog(null, "Invalid Login!");
+					userNameField.setText("");
+					passwordField.setText("");
+					return;
+				}
 			} catch (SQLException se) {
 				System.out.println("Error occured: " + se.getMessage());
 			}
