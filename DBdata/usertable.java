@@ -16,42 +16,30 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-public class StudTable extends JFrame implements ActionListener {
-
+public class usertable extends JFrame implements ActionListener {
     Statement st2 = Practice_Connector.createStatement();
-    String Reg_num, FirstName, LastName, Others, DOB, Gender, Facaulty, Department, Matric_Number;
+    String Phone_num, FirstName, LastName, Gender, User, Password;
     JTextField Search;
     JComboBox colname;
-    JButton Searching;
+    JButton Searching, Refresh;
     Font font = new Font("Comic sans", Font.BOLD, 12);
-    String[] Columns = { " FirstName ", " LastName ", " Other Name", " Date Of Birth ", "Gender",
-            "Registeration Number", "Facaulty", "Department", "Matric Number" };
-    String[] col = { "Registeration Number", "Matric Number" };
+    String[] Columns = { " FirstName ", " LastName ",
+            "Phone Number", "Username", "Password", "Gender" };
+    String[] col = { "Username", "Lastname", "Firstname", "Phone_Number" };
     DefaultTableModel DM = new DefaultTableModel(Columns, 0);
 
-    StudTable() {
-
+    usertable() {
         setTitle("Table Data");
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1400, 700);
         setLocationRelativeTo(null);
-        GridLayout gl = new GridLayout(0, 5);
+        GridLayout gl = new GridLayout(0, 6);
         gl.setVgap(20);
 
         JPanel northpanel = new JPanel();
@@ -59,6 +47,8 @@ public class StudTable extends JFrame implements ActionListener {
         northpanel.setBackground(Color.DARK_GRAY);
 
         northpanel.setLayout(gl);
+        Refresh = createbutton("Refresh");
+        northpanel.add(Refresh);
         northpanel.add(createlabel("Search By >"));
         colname = createbox(col);
         northpanel.add(colname);
@@ -78,22 +68,20 @@ public class StudTable extends JFrame implements ActionListener {
         add(scroll);
         setVisible(true);
 
-        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number";
+        String selectIntoTable = "SELECT * from administrative";
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
             while (rs.next()) {
+
                 FirstName = rs.getString("FirstName");
                 LastName = rs.getString("LastName");
-                Others = rs.getString("Other_names");
-                DOB = rs.getString("Date_of_Birth");
                 Gender = rs.getString("Gender");
-                Reg_num = rs.getString("Registration_Number");
-                Facaulty = rs.getString("Facaulty");
-                Department = rs.getString("Department");
-                Matric_Number = rs.getString("Matric_Number");
+                Phone_num = rs.getString("Phone_Number");
+                User = rs.getString("Username");
+                Password = rs.getString("Password");
 
-                String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
-                        Matric_Number };
+                String[] tablearr = { FirstName, LastName, Phone_num, User, Password, Gender
+                };
                 DM.addRow(tablearr);
             }
         } catch (SQLException sqe) {
@@ -143,32 +131,66 @@ public class StudTable extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent click) {
         String select = (String) colname.getSelectedItem();
+        if (click.getSource() == Refresh) {
+            int count = DM.getRowCount();
+            int i = count - 1;
+            while (i >= 0) {
+                DM.removeRow(i);
+                i--;
+            }
+
+            String selectIntoTable = "SELECT * from administrative";
+            try {
+                ResultSet rs = st2.executeQuery(selectIntoTable);
+                while (rs.next()) {
+
+                    FirstName = rs.getString("FirstName");
+                    LastName = rs.getString("LastName");
+                    Gender = rs.getString("Gender");
+                    Phone_num = rs.getString("Phone_Number");
+                    User = rs.getString("Username");
+                    Password = rs.getString("Password");
+
+                    String[] tablearr = { FirstName, LastName, Phone_num, User, Password, Gender
+                    };
+                    DM.addRow(tablearr);
+                }
+            } catch (SQLException sqe) {
+                System.out.println(sqe.getMessage());
+            }
+        }
         if (click.getSource() == Searching) {
             if (select.equals("") || Search.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "COMPLETE THE SEARCH REQUIREMENT!");
                 return;
 
             }
+
+            int count = DM.getRowCount();
+            int i = count - 1;
+            while (i >= 0) {
+                DM.removeRow(i);
+                i--;
+            }
+
             String selectIntoTable = String.format(
-                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where %s='%s' ",
+                    "SELECT * from administrative where %s='%s' ",
                     (String) colname.getSelectedItem(), (String) Search.getText());
 
             try {
                 ResultSet rs = st2.executeQuery(selectIntoTable);
                 while (rs.next()) {
+
                     FirstName = rs.getString("FirstName");
                     LastName = rs.getString("LastName");
-                    Others = rs.getString("Other_names");
-                    DOB = rs.getString("Date_of_Birth");
                     Gender = rs.getString("Gender");
-                    Reg_num = rs.getString("Registration_Number");
-                    Facaulty = rs.getString("Facaulty");
-                    Department = rs.getString("Department");
-                    Matric_Number = rs.getString("Matric_Number");
+                    Phone_num = rs.getString("Phone_Number");
+                    User = rs.getString("Username");
+                    Password = rs.getString("Password");
 
-                    String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
-                            Matric_Number };
+                    String[] tablearr = { FirstName, LastName, Phone_num, User, Password, Gender };
                     DM.addRow(tablearr);
+                    Search.setText("");
 
                 }
             } catch (SQLException sqe) {
@@ -179,7 +201,7 @@ public class StudTable extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new StudTable();
+        new usertable();
     }
 
 }
