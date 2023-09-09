@@ -245,7 +245,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     void generate() {
         String gots;
         faculty.removeAllItems();
-        faculty.addItem("CHOOSE A FACAULTY");
+        faculty.addItem("CHOOSE A FACULTY");
         String selectIntoTable = String.format("SELECT Facaultyname FROM Facaulty");
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
@@ -267,7 +267,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
         String got;
 
         department.removeAllItems();
-        if (select.equalsIgnoreCase("CHOOSE A FACAULTY")) {
+        if (select.equalsIgnoreCase("CHOOSE A FACULTY")) {
             department.addItem("");
 
         } else {

@@ -31,7 +31,7 @@ public class login extends JFrame implements ActionListener, WindowListener {
 
 	JTextField userNameField;
 	JPasswordField passwordField;
-	JButton submit, clear, Forgot;
+	JButton submit, clear, Forgot, create;
 	String tick = "";
 	Statement st2;
 
@@ -67,12 +67,15 @@ public class login extends JFrame implements ActionListener, WindowListener {
 		submit = createButton("Submit");
 		southPanel.add(submit);
 
+		create = createButton("Create Account");
+		southPanel.add(create);
+
 		addWindowListener(this);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("LOGIN");
 		setVisible(true);
 		pack();
-		setSize(600, 450);
+		setSize(821, 450);
 		setLocationRelativeTo(null);
 
 	}
@@ -129,6 +132,11 @@ public class login extends JFrame implements ActionListener, WindowListener {
 
 			dispose();
 		}
+		if (e.getSource() == create) {
+			tick = "create";
+
+			dispose();
+		}
 		if (e.getSource() == submit) {
 			if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Field Cannot Be Blank!!");
@@ -179,6 +187,8 @@ public class login extends JFrame implements ActionListener, WindowListener {
 			System.exit(0);
 		} else if (tick.equalsIgnoreCase("forgot")) {
 			new changepassword();
+		} else if (tick.equalsIgnoreCase("create")) {
+			new SignUp();
 		}
 
 	}

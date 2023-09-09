@@ -38,9 +38,10 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
 
     JTextField userNameField, firstnameField, lastNameField, Phone_Number;
     JPasswordField passwordField, ConfirmpasswordField;
-    JButton submit, clear;
+    JButton submit, clear, Login;
     JRadioButton male, female;
     String status, tick = "";
+    boolean result = false;
     Statement st2;
 
     public SignUp() {
@@ -115,6 +116,9 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         submit = createButton("Sign up");
         southPanel.add(submit);
 
+        Login = createButton("Login");
+        southPanel.add(Login);
+
         addWindowListener(this);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Sign Up");
@@ -174,6 +178,17 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         return label;
     }
 
+    boolean checkpass(String word) {
+
+        String vowels = "_@&";
+        for (char letter : word.toCharArray()) {
+            if (vowels.contains(letter + "")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     void insert() {
         ResultSet rs;
         try {
@@ -197,6 +212,11 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     }
 
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == Login) {
+            tick = "done";
+            dispose();
+
+        }
         if (e.getSource() == clear) {
             firstnameField.setText("");
             lastNameField.setText("");
@@ -225,6 +245,17 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                 return;
             }
 
+            if (!(passwordField.getText().length() >= 8)) {
+                JOptionPane.showMessageDialog(null, "Password Too Short!");
+                return;
+            }
+
+            if (!checkpass(passwordField.getText())) {
+                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,&)");
+                return;
+
+            }
+
             String selectIntoTable1 = String.format("SELECT * FROM administrative");
             String match, matches;
             ResultSet rs;
@@ -238,7 +269,6 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                         return;
                     }
                     matches = rs.getString("Username");
-                    System.out.println("jxn");
                     if ((userNameField.getText()).equalsIgnoreCase(matches)) {
                         userNameField.setText("");
                         JOptionPane.showMessageDialog(null, "Username exists!");

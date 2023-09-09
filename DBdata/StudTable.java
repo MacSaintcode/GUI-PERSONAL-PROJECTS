@@ -37,11 +37,11 @@ public class StudTable extends JFrame implements ActionListener {
     String Reg_num, FirstName, LastName, Others, DOB, Gender, Facaulty, Department, Matric_Number;
     JTextField Search;
     JComboBox colname;
-    JButton Searching;
+    JButton Searching, Refresh;
     Font font = new Font("Comic sans", Font.BOLD, 12);
     String[] Columns = { " FirstName ", " LastName ", " Other Name", " Date Of Birth ", "Gender",
             "Registeration Number", "Facaulty", "Department", "Matric Number" };
-    String[] col = { "Registeration Number", "Matric Number" };
+    String[] col = { "Registration_Number", "Matric_Number" };
     DefaultTableModel DM = new DefaultTableModel(Columns, 0);
 
     StudTable() {
@@ -51,7 +51,7 @@ public class StudTable extends JFrame implements ActionListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1400, 700);
         setLocationRelativeTo(null);
-        GridLayout gl = new GridLayout(0, 5);
+        GridLayout gl = new GridLayout(0, 6);
         gl.setVgap(20);
 
         JPanel northpanel = new JPanel();
@@ -59,6 +59,8 @@ public class StudTable extends JFrame implements ActionListener {
         northpanel.setBackground(Color.DARK_GRAY);
 
         northpanel.setLayout(gl);
+        Refresh = createbutton("Refresh");
+        northpanel.add(Refresh);
         northpanel.add(createlabel("Search By >"));
         colname = createbox(col);
         northpanel.add(colname);
@@ -78,7 +80,7 @@ public class StudTable extends JFrame implements ActionListener {
         add(scroll);
         setVisible(true);
 
-        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number";
+        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number ";
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
             while (rs.next()) {
@@ -94,6 +96,7 @@ public class StudTable extends JFrame implements ActionListener {
 
                 String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
                         Matric_Number };
+
                 DM.addRow(tablearr);
             }
         } catch (SQLException sqe) {
@@ -140,8 +143,47 @@ public class StudTable extends JFrame implements ActionListener {
         return btn;
     }
 
+    void callall() {
+        int count = DM.getRowCount();
+        int i = count - 1;
+        while (i >= 0) {
+            DM.removeRow(i);
+            i--;
+        }
+
+        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number ";
+
+        try {
+            ResultSet rs = st2.executeQuery(selectIntoTable);
+
+            while (rs.next()) {
+                FirstName = rs.getString("FirstName");
+                LastName = rs.getString("LastName");
+                Others = rs.getString("Other_names");
+                DOB = rs.getString("Date_of_Birth");
+                Gender = rs.getString("Gender");
+                Reg_num = rs.getString("Registration_Number");
+                Facaulty = rs.getString("Facaulty");
+                Department = rs.getString("Department");
+                Matric_Number = rs.getString("Matric_Number");
+
+                String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
+                        Matric_Number };
+
+                DM.addRow(tablearr);
+
+                Search.setText("");
+            }
+        } catch (SQLException sqe) {
+            System.out.println(sqe.getMessage());
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent click) {
+        if (click.getSource() == Refresh) {
+            callall();
+        }
         String select = (String) colname.getSelectedItem();
         if (click.getSource() == Searching) {
             if (select.equals("") || Search.getText().equals("")) {
@@ -149,12 +191,27 @@ public class StudTable extends JFrame implements ActionListener {
                 return;
 
             }
+            int count = DM.getRowCount();
+            int i = count - 1;
+            while (i >= 0) {
+                DM.removeRow(i);
+                i--;
+            }
             String selectIntoTable = String.format(
-                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where %s='%s' ",
+                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where register.%s='%s' ",
+                    (String) colname.getSelectedItem(), (String) Search.getText());
+
+            String selectIntoTable2 = String.format(
+                    "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number where identity.%s='%s' ",
                     (String) colname.getSelectedItem(), (String) Search.getText());
 
             try {
-                ResultSet rs = st2.executeQuery(selectIntoTable);
+                ResultSet rs = st2.executeQuery(selectIntoTable2);
+                if ((colname.getSelectedItem()).equals("Matric_Number")) {
+                    rs = st2.executeQuery(selectIntoTable2);
+                } else if ((colname.getSelectedItem()).equals("Registration_Number")) {
+                    rs = st2.executeQuery(selectIntoTable);
+                }
                 while (rs.next()) {
                     FirstName = rs.getString("FirstName");
                     LastName = rs.getString("LastName");
@@ -169,7 +226,13 @@ public class StudTable extends JFrame implements ActionListener {
                     String[] tablearr = { FirstName, LastName, Others, DOB, Gender, Reg_num, Facaulty, Department,
                             Matric_Number };
                     DM.addRow(tablearr);
+                    Search.setText("");
 
+                }
+                if (DM.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(null, "No Matching Result!");
+                    Search.setText("");
+                    callall();
                 }
             } catch (SQLException sqe) {
                 System.out.println(sqe.getMessage());

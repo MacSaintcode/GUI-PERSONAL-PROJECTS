@@ -25,9 +25,8 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     Font font = new Font("Comic sans", Font.BOLD, 30);
     JTextField Phone_Number, Username;
-    JPasswordField Password, cPassword;
     JButton submit, reset;
-    String tick = "", pass, User, phone;
+    String tick = "", User, phone;
     Statement st2;
 
     changepassword() {
@@ -49,14 +48,6 @@ public class changepassword extends JFrame implements ActionListener, WindowList
         centerpanel.add(createlabel("Phone Number"));
         Phone_Number = createtextfield();
         centerpanel.add(Phone_Number);
-
-        centerpanel.add(createlabel("Password"));
-        Password = createpassfield();
-        centerpanel.add(Password);
-
-        centerpanel.add(createlabel("Confirm Password"));
-        cPassword = createpassfield();
-        centerpanel.add(cPassword);
 
         JPanel southpanel = new JPanel();
         southpanel.setBackground(Color.DARK_GRAY);
@@ -119,16 +110,12 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     @Override
     public void actionPerformed(ActionEvent es) {
         if (es.getSource() == reset) {
-            Password.setText("");
-            cPassword.setText("");
             Phone_Number.setText("");
             Username.setText("");
             return;
 
         } else if (es.getSource() == submit) {
-
-            if (Username.getText().isEmpty() || Phone_Number.getText().isEmpty()
-                    || cPassword.getText().isEmpty() || Password.getText().isEmpty()) {
+            if (Username.getText().isEmpty() || Phone_Number.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Field cannot be Blank!");
 
                 return;
@@ -139,12 +126,7 @@ public class changepassword extends JFrame implements ActionListener, WindowList
                 JOptionPane.showMessageDialog(null, "INCORRECT PHONE NUMBER!");
                 return;
             }
-            if (!cPassword.getText().equals(Password.getText())) {
-                JOptionPane.showMessageDialog(null, "Passwords dont match!");
-                cPassword.setText("");
-                Password.setText("");
-                return;
-            }
+
             String selectIntoTable = String.format(
                     "SELECT Username,Phone_Number FROM administrative where Phone_Number='%s' ",
                     Phone_Number.getText());
@@ -164,14 +146,13 @@ public class changepassword extends JFrame implements ActionListener, WindowList
                         tick = "done";
                         User = Username.getText();
                         phone = Phone_Number.getText();
-                        pass = Password.getText();
+                        Phone_Number.setText("");
+                        Username.setText("");
                         dispose();
                     }
                 }
                 if (got.equals(false)) {
                     JOptionPane.showMessageDialog(null, "USER DOES NOT EXIST!");
-                    Password.setText("");
-                    cPassword.setText("");
                     Phone_Number.setText("");
                     Username.setText("");
                     return;
@@ -184,10 +165,6 @@ public class changepassword extends JFrame implements ActionListener, WindowList
         }
     }
 
-    public static void main(String[] args) {
-        new changepassword();
-    }
-
     @Override
     public void windowActivated(WindowEvent arg0) {
 
@@ -196,7 +173,7 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            PinEntry call = new PinEntry(User, phone, pass);
+            PinEntry call = new PinEntry(User, phone);
 
         } else {
             System.err.println("Password Unchanged!");

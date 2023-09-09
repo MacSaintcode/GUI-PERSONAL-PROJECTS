@@ -26,16 +26,15 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     JButton reset, submit;
     JTextField pin;
-    static String User, phone, pass;
+    static String User, phone, fin = "";
     int my_pin;
     boolean got = false;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
 
-    PinEntry(String use, String phon, String passwor) {
+    PinEntry(String use, String phon) {
         User = use;
         phone = phon;
-        pass = passwor;
         st2 = Practice_Connector.createStatement();
 
         JPanel centerpanel = new JPanel();
@@ -165,10 +164,6 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
             String gotpin;
             String getpin = String.format("select Administrative_Pin from acess where Username='%s'", User);
 
-            String selectIntoTable2 = String.format(
-                    "Update Administrative set password='%s' where Phone_Number='%s'and Username='%s' ", pass,
-                    phone, User);
-
             String deletefromTable = String.format(
                     "delete from acess where Username='%s' ", User);
             boolean grt = false;
@@ -178,10 +173,9 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
                     gotpin = rs.getString("Administrative_Pin");
                     if (gotpin.equals(pin.getText())) {
                         grt = true;
-                        st2.execute(selectIntoTable2);
-                        JOptionPane.showMessageDialog(null, "PASSWORD CHANGED!");
                         st2.execute(deletefromTable);
                         System.out.println("Pin Expired!");
+                        fin = "done";
                         dispose();
 
                     }
@@ -208,9 +202,13 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
+        if (fin.equalsIgnoreCase("done")) {
+            new changepassconfirm(User,phone);
+
+        }else{
         System.out.println("OTP Terminated");
         new login();
-
+        }
     }
 
     @Override
@@ -235,10 +233,6 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
     @Override
     public void windowOpened(WindowEvent arg0) {
-
-    }
-
-    public static void main(String[] args) {
 
     }
 }
