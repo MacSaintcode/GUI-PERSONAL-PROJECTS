@@ -68,7 +68,7 @@ public class usertable extends JFrame implements ActionListener {
         add(scroll);
         setVisible(true);
 
-        String selectIntoTable = "SELECT * from administrative";
+        String selectIntoTable = "SELECT * from administrative order by FirstName asc";
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
             while (rs.next()) {
@@ -139,7 +139,7 @@ public class usertable extends JFrame implements ActionListener {
                 i--;
             }
 
-            String selectIntoTable = "SELECT * from administrative";
+            String selectIntoTable = "SELECT * from administrative order by FirstName asc";
             try {
                 ResultSet rs = st2.executeQuery(selectIntoTable);
                 while (rs.next()) {
@@ -174,7 +174,7 @@ public class usertable extends JFrame implements ActionListener {
             }
 
             String selectIntoTable = String.format(
-                    "SELECT * from administrative where %s='%s' ",
+                    "SELECT * from administrative where %s='%s'",
                     (String) colname.getSelectedItem(), (String) Search.getText());
 
             try {

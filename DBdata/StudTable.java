@@ -80,7 +80,7 @@ public class StudTable extends JFrame implements ActionListener {
         add(scroll);
         setVisible(true);
 
-        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number ";
+        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number order by register.FirstName asc";
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
             while (rs.next()) {
@@ -151,7 +151,7 @@ public class StudTable extends JFrame implements ActionListener {
             i--;
         }
 
-        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number ";
+        String selectIntoTable = "SELECT register.Firstname,register.lastname,register.Other_names,register.Date_of_Birth,register.Gender,register.Registration_Number,identity.facaulty,identity.department,identity.Matric_Number FROM register inner join identity on register.Registration_Number=identity.Registration_Number order by register.FirstName asc ";
 
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);

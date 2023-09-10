@@ -180,7 +180,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
 
     boolean checkpass(String word) {
 
-        String vowels = "_@&";
+        String vowels = "_@&0123456789";
         for (char letter : word.toCharArray()) {
             if (vowels.contains(letter + "")) {
                 result = true;
@@ -227,6 +227,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
             male.setSelected(true);
 
         } else if (e.getSource() == submit) {
+
             if (userNameField.getText().isEmpty() || passwordField.getText().isEmpty()
                     || Phone_Number.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Field Cannot Be Empty!");
@@ -249,9 +250,8 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                 JOptionPane.showMessageDialog(null, "Password Too Short!");
                 return;
             }
-
-            if (!checkpass(passwordField.getText())) {
-                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,&)");
+            if (!checkpass(passwordField.getText()) && !checkpass(ConfirmpasswordField.getText())) {
+                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,& or number)");
                 return;
 
             }

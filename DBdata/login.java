@@ -153,25 +153,31 @@ public class login extends JFrame implements ActionListener, WindowListener {
 			try {
 				ResultSet rs = st2.executeQuery(query);
 				if (rs.next()) {
+					String un = rs.getString("username");
 					String pwFromDB = rs.getString("Password");
-					if (password.equals(pwFromDB))
+					if (password.equals(pwFromDB) && uname.equals(un)) {
 						tick = "done";
-					dispose();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "Invalid Login!");
+						userNameField.setText("");
+						passwordField.setText("");
+						return;
+					}
+
 				} else {
-					JOptionPane.showMessageDialog(null, "Invalid Login!");
+
+					JOptionPane.showMessageDialog(null, "User Does Not Exist!");
 					userNameField.setText("");
 					passwordField.setText("");
 					return;
+
 				}
+
 			} catch (SQLException se) {
 				System.out.println("Error occured: " + se.getMessage());
 			}
 		}
-
-	}
-
-	public static void main(String[] args) {
-		new login();
 
 	}
 
