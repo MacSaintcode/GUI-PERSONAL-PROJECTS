@@ -32,7 +32,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     JTextField firstnamefield, lastnamefield, Other_Names, Date_Of_Birth, Reg_num, Phone_Number;
     JButton submit, reset;
     JRadioButton male, female;
-    String tick="", Gender = "Male";
+    String tick = "", Gender = "Male";
 
     Statement st2;
 
@@ -186,7 +186,13 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 Date_Of_Birth.setText("YYYY-MM-DD");
                 return;
             }
-            if (!(Reg_num.getText().length()==8)) {
+            if (!(Reg_num.getText().length() == 8)) {
+                JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
+                Reg_num.setText("");
+                return;
+            }
+            Boolean resu = Pattern.matches("[0-9]{8}", Reg_num.getText());
+            if (resu == false) {
                 JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
                 Reg_num.setText("");
                 return;
@@ -252,7 +258,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
         if (tick.equalsIgnoreCase("done")) {
             JOptionPane.showMessageDialog(null, "PROCEED WITH REGISTRATION");
             new EnterPassword();
-        }else{
+        } else {
             System.err.println("GUI TERMINATED!");
         }
 
