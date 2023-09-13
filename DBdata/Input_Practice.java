@@ -256,12 +256,10 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     @Override
     public void windowClosed(WindowEvent e) {
         if (tick.equalsIgnoreCase("done")) {
-            JOptionPane.showMessageDialog(null, "PROCEED WITH REGISTRATION");
-            new EnterPassword();
+            new EnterPassword(st2);
         } else {
             System.err.println("GUI TERMINATED!");
         }
-
     }
 
     @Override

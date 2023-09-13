@@ -6,17 +6,20 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -38,11 +41,17 @@ public class StudTable extends JFrame implements ActionListener {
     JTextField Search;
     JComboBox colname;
     JButton Searching, Refresh;
+  
+
     Font font = new Font("Comic sans", Font.BOLD, 12);
     String[] Columns = { " FirstName ", " LastName ", " Other Name", " Date Of Birth ", "Gender",
             "Registeration Number", "Facaulty", "Department", "Matric Number" };
     String[] col = { "Registration_Number", "Matric_Number" };
     DefaultTableModel DM = new DefaultTableModel(Columns, 0);
+
+    StudTable(Statement st2) {
+
+    }
 
     StudTable() {
 
@@ -61,6 +70,9 @@ public class StudTable extends JFrame implements ActionListener {
         northpanel.setLayout(gl);
         Refresh = createbutton("Refresh");
         northpanel.add(Refresh);
+
+        
+
         northpanel.add(createlabel("Search By >"));
         colname = createbox(col);
         northpanel.add(colname);
@@ -105,6 +117,8 @@ public class StudTable extends JFrame implements ActionListener {
 
     }
 
+
+
     JLabel createlabel(String txt) {
         JLabel label = new JLabel(txt);
         label.setAlignmentX(20);
@@ -142,6 +156,8 @@ public class StudTable extends JFrame implements ActionListener {
         btn.addActionListener(this);
         return btn;
     }
+
+   
 
     void callall() {
         int count = DM.getRowCount();

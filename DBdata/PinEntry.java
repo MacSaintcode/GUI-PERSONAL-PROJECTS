@@ -27,10 +27,14 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     JButton reset, submit;
     JTextField pin;
     static String User, phone, fin = "";
-    int my_pin;
+    int my_pin, count = 5;;
     boolean got = false;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
+
+    PinEntry(Statement st2) {
+
+    }
 
     PinEntry(String use, String phon) {
         User = use;
@@ -72,12 +76,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
             JOptionPane.showMessageDialog(null, "User Does not Exist!");
             dispose();
         } else {
-            try {
-                Thread.sleep(5000);
-                JOptionPane.showMessageDialog(null, "Your 6-Digit OTP is " + my_pin);
-            } catch (InterruptedException ea) {
-                System.err.println("Query Terminated " + ea.getMessage());
-            }
+            JOptionPane.showMessageDialog(null, "Your 6-Digit OTP is " + my_pin);
         }
     }
 
@@ -148,16 +147,24 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
             }
             Boolean res = Pattern.matches("\\d{6}", pin.getText());
+
             if (res == false) {
                 if (!(pin.getText().length() == 6)) {
                     JOptionPane.showMessageDialog(null, "Enter a 6-digits Pin");
-                    pin.setText("");
-                    return;
-                } else {
+
+                }
+                if ((pin.getText().length() == 6)) {
                     JOptionPane.showMessageDialog(null, "INVALID PIN!");
-                    pin.setText("");
+                }
+                count--;
+                if (count == 0) {
+                    JOptionPane.showMessageDialog(null, "You Are Out of Tries");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "You Have " + count + " More Tries");
                     return;
                 }
+                pin.setText("");
             }
 
             ResultSet rs;
@@ -203,11 +210,11 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (fin.equalsIgnoreCase("done")) {
-            new changepassconfirm(User,phone);
+            new changepassconfirm(User, phone);
 
-        }else{
-        System.out.println("OTP Terminated");
-        new login();
+        } else {
+            System.out.println("OTP Terminated");
+            new login();
         }
     }
 

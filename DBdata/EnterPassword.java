@@ -35,8 +35,12 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     String tick = "";
     Statement st2;
 
+    EnterPassword(Statement st) {
+        this.st2 = st;
+        new EnterPassword();
+    }
+
     EnterPassword() {
-        st2 = Practice_Connector.createStatement();
 
         JPanel centerpanel = new JPanel();
         centerpanel.setBackground(bgcolor);

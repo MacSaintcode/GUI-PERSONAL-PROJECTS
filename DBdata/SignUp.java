@@ -44,6 +44,10 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     boolean result = false;
     Statement st2;
 
+    public SignUp(Statement st2) {
+
+    }
+
     public SignUp() {
         font = new Font("Comic sans", Font.BOLD, 30);
         st2 = Practice_Connector.createStatement();
@@ -251,7 +255,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                 return;
             }
             if (!checkpass(passwordField.getText()) && !checkpass(ConfirmpasswordField.getText())) {
-                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,& or number)");
+                JOptionPane.showMessageDialog(null, "Hint: Must Contain Either(_,@,& or number)");
                 return;
 
             }
@@ -313,7 +317,6 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            JOptionPane.showMessageDialog(null, "Login Your Account");
             new login();
         } else {
             System.out.println("GUI TERMINATED!");

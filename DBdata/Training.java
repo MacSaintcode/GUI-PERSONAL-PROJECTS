@@ -5,6 +5,12 @@ import java.util.Random;
 public class Training {
 
 	public static void main(String[] args) {
+		String pass="sbfsfljksad",password="";
+		for(int i =0;i<pass.length();i++){
+			password+="*";
+
+		}
+		System.out.println(password);
 
 		Random rand = new Random();
 		int addpin = rand.nextInt(100000,999999);

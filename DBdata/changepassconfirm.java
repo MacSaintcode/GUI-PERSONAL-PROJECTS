@@ -26,7 +26,12 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
     JPasswordField Password, cPassword;
     JButton submit, reset;
     String tick = "", User, phone;
+    boolean result;
     Statement st2;
+
+    changepassconfirm(Statement st2) {
+
+    }
 
     changepassconfirm(String use, String pho) {
         User = use;
@@ -99,6 +104,17 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
         return btn;
     }
 
+    boolean checkpass(String word) {
+
+        String vowels = "_@&0123456789";
+        for (char letter : word.toCharArray()) {
+            if (vowels.contains(letter + "")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     @Override
     public void actionPerformed(ActionEvent en) {
         if (en.getSource() == reset) {
@@ -118,6 +134,15 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
                 cPassword.setText("");
                 Password.setText("");
                 return;
+            }
+            if (!(Password.getText().length() >= 8)) {
+                JOptionPane.showMessageDialog(null, "Password Too Short!");
+                return;
+            }
+            if (!checkpass(Password.getText()) && !checkpass(cPassword.getText())) {
+                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,& or number)");
+                return;
+
             }
             String selectIntoTable2 = String.format(
                     "Update Administrative set password='%s' where Phone_Number='%s'and Username='%s' ",
