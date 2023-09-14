@@ -53,12 +53,11 @@ public class Practice_Connector {
             // System.out.println("Department Table created!");
             // st2.execute(query5);
             // st2.execute(query6);
-            
 
             System.out.println("Query executed");
         } catch (SQLException e) {
             System.out.println("Error occured: " + e.getMessage());
-            JOptionPane.showMessageDialog(null, "Server Error!");
+            JOptionPane.showMessageDialog(null, "Server Communications Failure!", "Error Occured!", 0);
             System.exit(0);
         }
         return st2;

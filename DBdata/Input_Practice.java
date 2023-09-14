@@ -234,10 +234,11 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 dispose();
             } catch (SQLException sq) {
                 System.out.println("Error occured....." + sq.getMessage() + "\tQuery has been terminated");
+                JOptionPane.showMessageDialog(null, "Software Crashed!", "Error Occured!", 0);
 
             } catch (NullPointerException po) {
-                JOptionPane.showMessageDialog(null, "Server Not Online Please Rectify it!");
-                // System.exit(0);
+                JOptionPane.showMessageDialog(null, "Server Not Online Please Rectify it!", "Error Occured!", 0);
+                return;
             }
 
         }

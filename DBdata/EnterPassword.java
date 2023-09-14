@@ -296,31 +296,42 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             JOptionPane.showMessageDialog(null, "Registration Complete!");
             new Input_Practice();
         } else {
-            // JOptionPane.showConfirmDialog(null, "Do You Want To Terminate Your Registration", "Confirmation!", 0, 3);
-            ResultSet rs;
-            // String gotpin, gotten = "";
-            // String getpin = String.format("select * from identity");
-            String deletefromTable = String.format(
-                    "delete from register where Registration_Number='%s'", reg);
-            try {
-                // rs = st2.executeQuery(getpin);
-                // while (rs.next()) {
-                // gotpin = rs.getString("Registration_Number");
-                // if (gotpin.equals(reg)) {
-                // gotten = "found";
-                // }
-                // }
-                // if (gotten.equals("found")) {
-                // } else {
-                st2.execute(deletefromTable);
-                // JOptionPane.showMessageDialog(null, "Registration Rolledback and
-                // Terminated!");
-                JOptionPane.showMessageDialog(null, "Registration Rolledback andTerminated!", "Termination!", 1);
-                // }
-            } catch (SQLException ea) {
-                System.err.println("Query Terminated " + ea.getMessage());
+            int result = JOptionPane.showConfirmDialog(null, "Do You Want To Terminate Your Registration",
+                    "Confirmation!", 0, 3);
+            if (result == JOptionPane.YES_OPTION) {
+                ResultSet rs;
+                // String gotpin, gotten = "";
+                // String getpin = String.format("select * from identity");
+                String deletefromTable = String.format(
+                        "delete from register where Registration_Number='%s'", reg);
+                try {
+                    // rs = st2.executeQuery(getpin);
+                    // while (rs.next()) {
+                    // gotpin = rs.getString("Registration_Number");
+                    // if (gotpin.equals(reg)) {
+                    // gotten = "found";
+                    // }
+                    // }
+                    // if (gotten.equals("found")) {
+                    // } else {
+                    st2.execute(deletefromTable);
+                    // JOptionPane.showMessageDialog(null, "Registration Rolledback and
+                    // Terminated!");
+                    JOptionPane.showMessageDialog(null, "Registration Rolledback andTerminated!", "Termination!", 2);
+                    // }
+                } catch (SQLException ea) {
+                    System.err.println("Query Terminated " + ea.getMessage());
+                }
+                new Input_Practice();
+
+            } else if (result == JOptionPane.NO_OPTION) {
+                new EnterPassword(reg);
+
+            } else if (result == JOptionPane.CLOSED_OPTION) {
+                new EnterPassword(reg);
+
             }
-            new Input_Practice();
+
         }
     }
 
