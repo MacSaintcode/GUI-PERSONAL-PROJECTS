@@ -56,7 +56,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
 
         add(centerPanel);
 
-        GridLayout gl = new GridLayout(7, 2);
+        GridLayout gl = new GridLayout(8, 2);
         gl.setVgap(10);
         centerPanel.setLayout(gl);
 
@@ -303,7 +303,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
     }
 
     public static void main(String[] args) {
-        new SignUp();
+        new PortalSignup();
 
     }
 
