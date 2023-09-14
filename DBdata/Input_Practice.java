@@ -221,7 +221,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                     Reg_num.getText());
 
             try {
-                st2.execute(InputQuery);
+                st2.execute(InputQuery); 
                 System.out.println("Query Executed Sucessfully");
                 regnum = Reg_num.getText();
                 firstnamefield.setText("");
