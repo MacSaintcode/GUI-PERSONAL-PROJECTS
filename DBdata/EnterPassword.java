@@ -32,27 +32,23 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     JTextField Reg_num;
     JComboBox<String> department, faculty;
     Font font = new Font("Comic sans", Font.BOLD, 20);
-    String tick = "";
-    Statement st2;
+    String tick = "", reg;
+    public Statement st2 = Practice_Connector.createStatement();
 
-    EnterPassword(Statement st) {
-        this.st2 = st;
-        new EnterPassword();
-    }
-
-    EnterPassword() {
+    EnterPassword(String regnum) {
+        reg = regnum;
 
         JPanel centerpanel = new JPanel();
         centerpanel.setBackground(bgcolor);
         add(centerpanel);
 
-        GridLayout gl = new GridLayout(3, 2);
+        GridLayout gl = new GridLayout(2, 2);
         gl.setVgap(10);
         centerpanel.setLayout(gl);
 
-        centerpanel.add(createlabel("Reg Number"));
-        Reg_num = createtextfield();
-        centerpanel.add(Reg_num);
+        // centerpanel.add(createlabel("Reg Number"));
+        // Reg_num = createtextfield();
+        // centerpanel.add(Reg_num);
 
         centerpanel.add(createlabel("Facaulty"));
         faculty = createjbox();
@@ -79,7 +75,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Registeration");
         pack();
-        setSize(500, 300);
+        setSize(500, 200);
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -113,34 +109,34 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
         return box;
     }
 
-    JTextField createtextfield() {
-        JTextField field = new JTextField();
-        field.setBackground(bgcolor);
-        field.setForeground(fgcolor);
-        field.setFont(font);
+    // JTextField createtextfield() {
+    // JTextField field = new JTextField();
+    // field.setBackground(bgcolor);
+    // field.setForeground(fgcolor);
+    // field.setFont(font);
 
-        return field;
-    }
+    // return field;
+    // }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == reset) {
-            Reg_num.setText("");
+            // Reg_num.setText("");
             faculty.setSelectedItem("CHOOSE A FACAULTY");
             return;
 
         } else if (e.getSource() == submit) {
-            if (Reg_num.getText().isEmpty() || department.getSelectedItem().equals("")
-                    || faculty.getSelectedItem().equals("")) {
+            if (/* Reg_num.getText().isEmpty() || */ department.getSelectedItem().equals("")
+                    || faculty.getSelectedItem().equals("") || faculty.getSelectedItem().equals("CHOOSE A FACAULTY")) {
                 JOptionPane.showMessageDialog(null, "Field cannot be Blank!");
                 return;
 
             }
-            if (!(Reg_num.getText().length() == 8)) {
-                JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
-                Reg_num.setText("");
-                return;
-            }
+            // if (!(Reg_num.getText().length() == 8)) {
+            // JOptionPane.showMessageDialog(null, "Invalid Registration Number!");
+            // Reg_num.setText("");
+            // return;
+            // }
 
             String selectIntoTable1 = String.format("SELECT Registration_Number FROM Identity");
             String selectIntoTable = String.format("SELECT Registration_Number FROM register");
@@ -151,14 +147,14 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 rs = st2.executeQuery(selectIntoTable);
                 while (rs.next()) {
                     matches = rs.getString("Registration_Number");
-                    if ((Reg_num.getText()).equalsIgnoreCase(matches)) {
+                    if (reg.equalsIgnoreCase(matches)) {
                         got = true;
                         break;
                     }
                 }
                 if (got.equals(false)) {
                     JOptionPane.showMessageDialog(null, "THIS REGISTRATION NUMBER HAS NOT BEEN REGISTERED!");
-                    Reg_num.setText("");
+                    // Reg_num.setText("");
                     department.setSelectedItem("");
                     faculty.setSelectedItem("CHOOSE A FACAULTY");
                     return;
@@ -168,10 +164,10 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 while (rs.next()) {
                     match = rs.getString("Registration_Number");
 
-                    if ((Reg_num.getText()).equalsIgnoreCase(match)) {
+                    if (reg.equalsIgnoreCase(match)) {
                         JOptionPane.showMessageDialog(null,
                                 "THIS REGISTRATION NUMBER OWNER HAS COMPLETED THE REGISTRATION PROCESS!");
-                        Reg_num.setText("");
+                        // Reg_num.setText("");
                         faculty.setSelectedItem("CHOOSE A FACAULTY");
                         return;
                     }
@@ -182,7 +178,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             }
 
             String InputQuery = String.format("INSERT INTO identity VALUES('%s','%s','%s','%s')",
-                    Reg_num.getText(), null, (String) faculty.getSelectedItem(), (String) department.getSelectedItem());
+                    reg, null, (String) faculty.getSelectedItem(), (String) department.getSelectedItem());
 
             selectIntoTable = String.format("SELECT Matric_Number FROM Identity");
 
@@ -226,7 +222,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
 
             String InputQuery2 = String.format(
                     "UPDATE identity SET Matric_Number = '%s' WHERE Registration_Number = '%s' ", (String) matric,
-                    (String) Reg_num.getText());
+                    reg);
             try {
                 st2.execute(InputQuery);
                 System.out.println("Query Executed Sucessfully");
@@ -234,7 +230,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 JOptionPane.showMessageDialog(null, "Registered Sucessfully!! ");
                 JOptionPane.showMessageDialog(null, "Your Matric Number is" + matric);
                 System.out.println("Query Executed Sucessfully");
-                Reg_num.setText("");
+                // Reg_num.setText("");
                 faculty.setSelectedItem("CHOOSE A FACAULTY");
                 tick = "done";
                 dispose();
@@ -300,40 +296,56 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
             JOptionPane.showMessageDialog(null, "Registration Complete!");
             new Input_Practice();
         } else {
-            JOptionPane.showMessageDialog(null, "Registration Terminated!");
+            // JOptionPane.showConfirmDialog(null, "Do You Want To Terminate Your Registration", "Confirmation!", 0, 3);
+            ResultSet rs;
+            // String gotpin, gotten = "";
+            // String getpin = String.format("select * from identity");
+            String deletefromTable = String.format(
+                    "delete from register where Registration_Number='%s'", reg);
+            try {
+                // rs = st2.executeQuery(getpin);
+                // while (rs.next()) {
+                // gotpin = rs.getString("Registration_Number");
+                // if (gotpin.equals(reg)) {
+                // gotten = "found";
+                // }
+                // }
+                // if (gotten.equals("found")) {
+                // } else {
+                st2.execute(deletefromTable);
+                // JOptionPane.showMessageDialog(null, "Registration Rolledback and
+                // Terminated!");
+                JOptionPane.showMessageDialog(null, "Registration Rolledback andTerminated!", "Termination!", 1);
+                // }
+            } catch (SQLException ea) {
+                System.err.println("Query Terminated " + ea.getMessage());
+            }
             new Input_Practice();
         }
-
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowIconified(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowOpened(WindowEvent arg0) {
-
     }
 
     public static void main(String[] args) {
-        new EnterPassword();
-
+        Input_Practice call = new Input_Practice();
     }
 
 }

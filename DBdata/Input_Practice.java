@@ -32,12 +32,11 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     JTextField firstnamefield, lastnamefield, Other_Names, Date_Of_Birth, Reg_num, Phone_Number;
     JButton submit, reset;
     JRadioButton male, female;
-    String tick = "", Gender = "Male";
+    String tick = "", Gender = "Male", regnum;
 
-    Statement st2;
+    public Statement st2 = Practice_Connector.createStatement();
 
     public Input_Practice() {
-        st2 = Practice_Connector.createStatement();
 
         JPanel centerpanel = new JPanel();
         centerpanel.setBackground(bgcolor);
@@ -177,7 +176,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
             }
 
             if (Other_Names.getText().isEmpty()) {
-                Other_Names = null;
+                Other_Names.setText(null);
             }
 
             Boolean res = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", Date_Of_Birth.getText());
@@ -208,6 +207,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                     if (((String) Reg_num.getText()).equalsIgnoreCase(match)) {
                         JOptionPane.showMessageDialog(null,
                                 "THIS REGISTRATION NUMBER HAS BEEN ASSIGNED TO ANOTHER STUDENT!");
+                        Reg_num.setText("");
                         return;
                     }
                 }
@@ -223,6 +223,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
             try {
                 st2.execute(InputQuery);
                 System.out.println("Query Executed Sucessfully");
+                regnum = Reg_num.getText();
                 firstnamefield.setText("");
                 lastnamefield.setText("");
                 Date_Of_Birth.setText("YYYY-MM-DD");
@@ -236,7 +237,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
             } catch (NullPointerException po) {
                 JOptionPane.showMessageDialog(null, "Server Not Online Please Rectify it!");
-                System.exit(0);
+                // System.exit(0);
             }
 
         }
@@ -256,7 +257,8 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     @Override
     public void windowClosed(WindowEvent e) {
         if (tick.equalsIgnoreCase("done")) {
-            new EnterPassword(st2);
+
+            new EnterPassword(regnum);
         } else {
             System.err.println("GUI TERMINATED!");
         }

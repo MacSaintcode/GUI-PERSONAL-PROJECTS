@@ -214,6 +214,25 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
 
         } else {
             System.out.println("OTP Terminated");
+            ResultSet rs;
+            String gotpin;
+            String getpin = String.format("select Administrative_Pin from acess where Username='%s'", User);
+
+            String deletefromTable = String.format(
+                    "delete from acess where Username='%s' ", User);
+            try {
+                rs = st2.executeQuery(getpin);
+                while (rs.next()) {
+                    gotpin = rs.getString("Administrative_Pin");
+                    if (gotpin.equals(pin.getText())) {
+                        st2.execute(deletefromTable);
+                        System.out.println("Pin Expired!");
+
+                    }
+                }
+            } catch (SQLException ea) {
+                System.err.println("Query Terminated " + ea.getMessage());
+            }
             new login();
         }
     }
