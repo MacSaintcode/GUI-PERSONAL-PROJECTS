@@ -33,9 +33,10 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
     JComboBox<String> department, faculty;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     String tick = "", reg;
-    public Statement st2 = Practice_Connector.createStatement();
+    public Statement st2;
 
-    EnterPassword(String regnum) {
+    EnterPassword(String regnum, Statement st) {
+        st2 = st;
         reg = regnum;
 
         JPanel centerpanel = new JPanel();
@@ -325,10 +326,10 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                 new Input_Practice();
 
             } else if (result == JOptionPane.NO_OPTION) {
-                new EnterPassword(reg);
+                new EnterPassword(reg,st2);
 
             } else if (result == JOptionPane.CLOSED_OPTION) {
-                new EnterPassword(reg);
+                new EnterPassword(reg,st2);
 
             }
 

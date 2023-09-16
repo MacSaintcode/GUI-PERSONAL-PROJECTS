@@ -48,10 +48,6 @@ public class StudTable extends JFrame implements ActionListener {
     String[] col = { "Registration_Number", "Matric_Number", " Firstname ", " Lastname " };
     DefaultTableModel DM = new DefaultTableModel(Columns, 0);
 
-    StudTable(Statement st2) {
-
-    }
-
     StudTable() {
 
         setTitle("Table Data");

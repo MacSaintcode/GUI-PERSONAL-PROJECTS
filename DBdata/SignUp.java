@@ -44,10 +44,6 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     boolean result = false;
     Statement st2;
 
-    public SignUp(Statement st2) {
-
-    }
-
     public SignUp() {
         font = new Font("Comic sans", Font.BOLD, 30);
         st2 = Practice_Connector.createStatement();
@@ -317,7 +313,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            new login();
+            new login(st2);
         } else {
             System.out.println("GUI TERMINATED!");
         }

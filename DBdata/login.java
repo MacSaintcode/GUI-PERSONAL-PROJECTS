@@ -34,15 +34,11 @@ public class login extends JFrame implements ActionListener, WindowListener {
 	JButton submit, clear, Forgot, create;
 	String tick = "";
 	Statement st2;
-	public login(Statement st2) {
 
-    }
-
-	public login() {
-
-		font = new Font("Comic Sans", Font.BOLD, 30);
+	public login(Statement st) {
 		st2 = Practice_Connector.createStatement();
 
+		font = new Font("Comic Sans", Font.BOLD, 30);
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(bgColor);
 		add(centerPanel);

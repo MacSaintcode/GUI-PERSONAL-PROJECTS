@@ -36,6 +36,8 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
 
     public Statement st2 = Practice_Connector.createStatement();
 
+
+
     public Input_Practice() {
 
         JPanel centerpanel = new JPanel();
@@ -259,7 +261,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     public void windowClosed(WindowEvent e) {
         if (tick.equalsIgnoreCase("done")) {
 
-            new EnterPassword(regnum);
+            new EnterPassword(regnum,st2);
         } else {
             System.err.println("GUI TERMINATED!");
         }
