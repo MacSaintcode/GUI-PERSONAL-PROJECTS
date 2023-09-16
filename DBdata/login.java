@@ -36,7 +36,7 @@ public class login extends JFrame implements ActionListener, WindowListener {
 	Statement st2;
 
 	public login(Statement st) {
-		st2 = Practice_Connector.createStatement();
+		st2 = st;
 
 		font = new Font("Comic Sans", Font.BOLD, 30);
 		JPanel centerPanel = new JPanel();
@@ -106,6 +106,7 @@ public class login extends JFrame implements ActionListener, WindowListener {
 		txtField.setForeground(fgColor);
 		txtField.setBackground(bgColor);
 		txtField.setCaretColor(Color.CYAN);
+		txtField.setEchoChar('*');
 
 		return txtField;
 	}
@@ -191,7 +192,7 @@ public class login extends JFrame implements ActionListener, WindowListener {
 			JOptionPane.showMessageDialog(null, "LOGIN SUCCESSFUL");
 			System.exit(0);
 		} else if (tick.equalsIgnoreCase("forgot")) {
-			new changepassword();
+			new changepassword(st2);
 		} else if (tick.equalsIgnoreCase("create")) {
 			new SignUp();
 		}

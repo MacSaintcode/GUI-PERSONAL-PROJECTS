@@ -39,7 +39,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     JTextField userNameField, firstnameField, lastNameField, Phone_Number;
     JPasswordField passwordField, ConfirmpasswordField;
     JButton submit, clear, Login;
-    JRadioButton male, female;
+    JRadioButton male, female, show, hide;
     String status, tick = "";
     boolean result = false;
     Statement st2;
@@ -54,7 +54,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         centerPanel.setBackground(bgColor);
         add(centerPanel);
 
-        GridLayout gl = new GridLayout(7, 2);
+        GridLayout gl = new GridLayout(8, 2);
         gl.setVgap(10);
         centerPanel.setLayout(gl);
 
@@ -82,14 +82,36 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         passwordField = createPasswordField();
         centerPanel.add(passwordField);
 
+        JPanel combines = new JPanel();
+        combines.setBackground(bgColor);
+
+        show = checkButton("Show");
+        combines.add(show);
+
+        hide = checkButton("Hide");
+        combines.add(hide);
+
+        ButtonGroup groupie = new ButtonGroup();
+        groupie.add(hide);
+        groupie.add(show);
+
+        hide.addItemListener(this);
+        show.addItemListener(this);
+
+
+
         centerPanel.add(createLabel("ConfirmPassword"));
         ConfirmpasswordField = createPasswordField();
         centerPanel.add(ConfirmpasswordField);
+        centerPanel.add(createLabel(""));
+
+        centerPanel.add(combines);
 
         male = checkButton("male");
         female = checkButton("female");
 
         JPanel combine = new JPanel();
+
         combine.setBackground(bgColor);
         combine.add(male);
         combine.add(female);
@@ -105,6 +127,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         female.addItemListener(this);
 
         male.setSelected(true);
+        hide.setSelected(true);
 
         JPanel southPanel = new JPanel();
         southPanel.setBackground(Color.BLUE);
@@ -124,7 +147,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         setTitle("Sign Up");
         setVisible(true);
         pack();
-        setSize(570, 600);
+        setSize(570, 650);
         setLocationRelativeTo(null);
 
     }
@@ -292,10 +315,19 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
     public void itemStateChanged(ItemEvent e) {
         if (male.isSelected()) {
             status = "male";
-        } else if (female.isSelected()) {
+        }
+        if (female.isSelected()) {
             status = "Female";
-        } else {
-            status = null;
+        }
+        if (show.isSelected()) {
+            passwordField.setEchoChar((char) 0);
+            ConfirmpasswordField.setEchoChar((char) 0);
+
+        }
+        if (hide.isSelected()) {
+            passwordField.setEchoChar('*');
+            ConfirmpasswordField.setEchoChar('*');
+
         }
 
     }

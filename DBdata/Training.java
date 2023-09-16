@@ -2,21 +2,26 @@ package DBdata;
 
 import java.util.Random;
 
+import java.io.Console;
+import javax.swing.*;
+
 public class Training {
 
 	public static void main(String[] args) {
-		String pass="sbfsfljksad",password="";
-		for(int i =0;i<pass.length();i++){
-			password+="*";
+
+		PasswordFieldExample call = new PasswordFieldExample();
+		String pass = "sbfsfljksad", password = "";
+		for (int i = 0; i < pass.length(); i++) {
+			password += "*";
 
 		}
 		System.out.println(password);
 
 		Random rand = new Random();
-		int addpin = rand.nextInt(100000,999999);
+		int addpin = rand.nextInt(100000, 999999);
 		System.out.println(addpin);
 
-		SignUp il=new SignUp();
+		SignUp il = new SignUp();
 		System.out.println(il.Phone_Number);
 
 		// System.out.println("wats wrong");
@@ -70,4 +75,22 @@ public class Training {
 
 	}
 
+}
+
+class PasswordFieldExample {
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Password Field Example");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(300, 100);
+
+		JTextField passwordField = new JTextField(20);
+		passwordField.setEchoChar('*'); // Set the echo character
+
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("Password:"));
+		panel.add(passwordField);
+
+		frame.add(panel);
+		frame.setVisible(true);
+	}
 }
