@@ -317,7 +317,7 @@ public class EnterPassword extends JFrame implements ActionListener, ItemListene
                     st2.execute(deletefromTable);
                     // JOptionPane.showMessageDialog(null, "Registration Rolledback and
                     // Terminated!");
-                    JOptionPane.showMessageDialog(null, "Registration Rolledback andTerminated!", "Termination!", 2);
+                    JOptionPane.showMessageDialog(null, "Registration Rolledback and Terminated!", "Termination!", 2);
                     // }
                 } catch (SQLException ea) {
                     System.err.println("Query Terminated " + ea.getMessage());

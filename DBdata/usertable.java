@@ -183,8 +183,8 @@ public class usertable extends JFrame implements ActionListener, ItemListener {
         }
 
         String selectIntoTable = String.format(
-                "SELECT * from administrative where %s='%s'",
-                (String) colname.getSelectedItem(), (String) sach);
+                "SELECT * from administrative where %s like '%s'",
+                (String) colname.getSelectedItem(), "%" + (String) sach + "%");
 
         try {
             ResultSet rs = st2.executeQuery(selectIntoTable);
@@ -197,16 +197,14 @@ public class usertable extends JFrame implements ActionListener, ItemListener {
                 User = rs.getString("Username");
                 Password = rs.getString("Password");
 
-                if (((String) colname.getSelectedItem()).contains(sach)) {
-                    if (view.equalsIgnoreCase("hide")) {
-                        String[] tablearr = { FirstName, LastName, Phone_num, User, "******", Gender
-                        };
-                        DM.addRow(tablearr);
-                    } else {
-                        String[] tablearr = { FirstName, LastName, Phone_num, User, Password, Gender
-                        };
-                        DM.addRow(tablearr);
-                    }
+                if (view.equalsIgnoreCase("hide")) {
+                    String[] tablearr = { FirstName, LastName, Phone_num, User, "******", Gender
+                    };
+                    DM.addRow(tablearr);
+                } else {
+                    String[] tablearr = { FirstName, LastName, Phone_num, User, Password, Gender
+                    };
+                    DM.addRow(tablearr);
                 }
             }
             if (DM.getRowCount() == 0) {

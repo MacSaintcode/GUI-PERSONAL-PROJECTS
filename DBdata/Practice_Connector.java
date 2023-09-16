@@ -37,6 +37,9 @@ public class Practice_Connector {
             String query7 = "CREATE TABLE IF NOT EXISTS acess(Username varchar(30), Administrative_Pin int, FOREIGN key (Username) REFERENCES administrative(Username))";
             String query8 = "CREATE TABLE IF NOT EXISTS administrative(Firstname VARCHAR (50),lastname VARCHAR (50),Phone_Number VARCHAR (20) UNIQUE key,Username VARCHAR (50) Primary key, Password VARCHAR(20),Gender VARCHAR (20))";
 
+            String query9 = "CREATE TABLE IF NOT EXISTS studentportal(Firstname VARCHAR (50),lastname VARCHAR (50),Phone_Number VARCHAR (20) UNIQUE key,Matric_Number VARCHAR (50),Username VARCHAR (50) Primary key, Password VARCHAR(20),Gender VARCHAR (20))";
+            String query10 = "CREATE TABLE IF NOT EXISTS acessible(Username varchar(30), Administrative_Pin int, FOREIGN key (Username) REFERENCES studentportal(Username))";
+
             String query5 = "INSERT INTO Facaulty VALUES(1,'Science'),(2,'Art'),(3,'Agriculture_Forestry'),(4,'Pharmacy'),(5,'Social_Science')";
             String query6 = "INSERT INTO department VALUES(1,'Computer Science','Literature','Fishing','Bio Chemistry','social Networking'),(2,'Science','Science','Science','Science','Science')";
             st2.execute(query);

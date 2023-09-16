@@ -123,7 +123,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
 
         addWindowListener(this);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setTitle("Sign Up");
+        setTitle("Student Portal");
         setVisible(true);
         pack();
         setSize(570, 600);
@@ -194,9 +194,10 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
     void insert() {
         ResultSet rs;
         try {
-            String insertValue = String.format("INSERT INTO administrative VALUES ('%s','%s','%s', '%s', '%s', '%s')",
-                    firstnameField.getText(), lastNameField.getText(), Phone_Number.getText(), userNameField.getText(),
-                    passwordField.getText(), status);
+            String insertValue = String.format(
+                    "INSERT INTO studentportal VALUES ('%s','%s','%s','%s', '%s', '%s', '%s')",
+                    firstnameField.getText(), lastNameField.getText(), Phone_Number.getText(), matric.getText(),
+                    userNameField.getText(), passwordField.getText(), status);
 
             st2.execute(insertValue);
             firstnameField.setText("");
@@ -217,7 +218,6 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
         if (e.getSource() == Login) {
             tick = "done";
             dispose();
-
         }
         if (e.getSource() == clear) {
             firstnameField.setText("");
@@ -255,14 +255,31 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
             if (!checkpass(passwordField.getText()) && !checkpass(ConfirmpasswordField.getText())) {
                 JOptionPane.showMessageDialog(null, "Hint: Must Contain Either(_,@,& or number)");
                 return;
-
             }
-
-            String selectIntoTable1 = String.format("SELECT * FROM administrative");
-            String match, matches;
+            String selectIntoTable1 = String.format("SELECT * FROM identity");
+            String match, matches = "notin";
             ResultSet rs;
             try {
                 rs = st2.executeQuery(selectIntoTable1);
+                while (rs.next()) {
+                    match = rs.getString("Matric_Number");
+                    if ((matric.getText()).equalsIgnoreCase(match)) {
+                        matches = "gotten";
+                        break;
+                    }
+                }
+                if (!matches.equals("gotten")) {
+                    JOptionPane.showMessageDialog(null, "This Matric Number Does Not Exist!");
+                }
+
+            } catch (SQLException e1) {
+                System.out.println("Error occured..." + e1.getMessage());
+            }
+
+            String selectIntoTable2 = String.format("SELECT * FROM studentportal");
+
+            try {
+                rs = st2.executeQuery(selectIntoTable2);
                 while (rs.next()) {
                     match = rs.getString("Phone_Number");
                     if ((Phone_Number.getText()).equalsIgnoreCase(match)) {
@@ -275,19 +292,16 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
                         userNameField.setText("");
                         JOptionPane.showMessageDialog(null, "Username exists!");
                         return;
-
                     }
 
                 }
                 insert();
                 tick = "done";
                 dispose();
-
             } catch (SQLException e1) {
                 System.out.println("Error occured..." + e1.getMessage());
             }
         }
-
     }
 
     @Override
@@ -299,52 +313,43 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
         } else {
             status = null;
         }
-
     }
 
     public static void main(String[] args) {
         new PortalSignup();
-
     }
 
     @Override
     public void windowActivated(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            new login();
+            new portallogin();
         } else {
             System.out.println("GUI TERMINATED!");
         }
-
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowDeactivated(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowDeiconified(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowIconified(WindowEvent arg0) {
-
     }
 
     @Override
     public void windowOpened(WindowEvent arg0) {
-
     }
 
 }

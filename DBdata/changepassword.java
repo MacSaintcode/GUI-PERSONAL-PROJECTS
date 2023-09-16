@@ -29,9 +29,6 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     String tick = "", User, phone;
     Statement st2;
 
-    changepassword(Statement st2) {
-
-    }
     changepassword() {
         st2 = Practice_Connector.createStatement();
         GridLayout gl = new GridLayout(4, 1);
