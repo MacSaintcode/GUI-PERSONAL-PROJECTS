@@ -8,8 +8,6 @@ import javax.swing.*;
 public class Training {
 
 	public static void main(String[] args) {
-
-		PasswordFieldExample call = new PasswordFieldExample();
 		String pass = "sbfsfljksad", password = "";
 		for (int i = 0; i < pass.length(); i++) {
 			password += "*";
@@ -75,22 +73,4 @@ public class Training {
 
 	}
 
-}
-
-class PasswordFieldExample {
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Password Field Example");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(300, 100);
-
-		JTextField passwordField = new JTextField(20);
-		passwordField.setEchoChar('*'); // Set the echo character
-
-		JPanel panel = new JPanel();
-		panel.add(new JLabel("Password:"));
-		panel.add(passwordField);
-
-		frame.add(panel);
-		frame.setVisible(true);
-	}
 }

@@ -26,20 +26,17 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     JButton reset, submit;
     JTextField pin;
-    static String User, phone, fin = "";
+    static String User, phone, fin = "", wher = "";
     int my_pin, count = 5;;
     boolean got = false;
     Font font = new Font("Comic sans", Font.BOLD, 20);
     Statement st2;
 
-    PinEntry(Statement st2) {
-
-    }
-
-    PinEntry(String use, String phon) {
+    PinEntry(String use, String phon, Statement st, String caugth) {
         User = use;
         phone = phon;
-        st2 = Practice_Connector.createStatement();
+        st2 = st;
+        wher = caugth;
 
         JPanel centerpanel = new JPanel();
         centerpanel.setBackground(bgcolor);
@@ -210,7 +207,12 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (fin.equalsIgnoreCase("done")) {
-            new changepassconfirm(User, phone);
+            if (wher.equals("portal")) {
+                new confirmportalpass(User, phone, st2);
+
+            } else if (wher.equalsIgnoreCase("admin")) {
+                new changepassconfirm(User, phone, st2);
+            }
 
         } else {
             System.out.println("OTP Terminated");
@@ -233,7 +235,7 @@ public class PinEntry extends JFrame implements ActionListener, WindowListener {
             } catch (SQLException ea) {
                 System.err.println("Query Terminated " + ea.getMessage());
             }
-            new login();
+            new login(st2);
         }
     }
 

@@ -98,8 +98,6 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
         hide.addItemListener(this);
         show.addItemListener(this);
 
-
-
         centerPanel.add(createLabel("ConfirmPassword"));
         ConfirmpasswordField = createPasswordField();
         centerPanel.add(ConfirmpasswordField);
@@ -203,7 +201,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
 
     boolean checkpass(String word) {
 
-        String vowels = "_@&0123456789";
+        String vowels = "_@&0123456789~!@#$%^&*()_+=-/.,><|][{}]";
         for (char letter : word.toCharArray()) {
             if (vowels.contains(letter + "")) {
                 result = true;
@@ -274,7 +272,7 @@ public class SignUp extends JFrame implements ActionListener, ItemListener, Wind
                 return;
             }
             if (!checkpass(passwordField.getText()) && !checkpass(ConfirmpasswordField.getText())) {
-                JOptionPane.showMessageDialog(null, "Hint: Must Contain Either(_,@,& or number)");
+                JOptionPane.showMessageDialog(null, "Hint: Must Contain Symbools Or Number");
                 return;
 
             }

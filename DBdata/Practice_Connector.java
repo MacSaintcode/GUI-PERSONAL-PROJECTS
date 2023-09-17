@@ -54,8 +54,8 @@ public class Practice_Connector {
             // System.out.println("access Table created!");
             st2.execute(query7);
             // System.out.println("Department Table created!");
-            // st2.execute(query5);
-            // st2.execute(query6);
+            st2.execute(query9);
+            st2.execute(query10);
 
             System.out.println("Query executed");
         } catch (SQLException e) {

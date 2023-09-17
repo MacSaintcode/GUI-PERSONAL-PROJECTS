@@ -39,7 +39,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
     JTextField userNameField, firstnameField, lastNameField, Phone_Number, matric;
     JPasswordField passwordField, ConfirmpasswordField;
     JButton submit, clear, Login;
-    JRadioButton male, female;
+    JRadioButton male, female, show, hide;
     String status, tick = "";
     boolean result = false;
     Statement st2;
@@ -56,7 +56,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
 
         add(centerPanel);
 
-        GridLayout gl = new GridLayout(8, 2);
+        GridLayout gl = new GridLayout(9, 2);
         gl.setVgap(10);
         centerPanel.setLayout(gl);
 
@@ -88,6 +88,26 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
         ConfirmpasswordField = createPasswordField();
         centerPanel.add(ConfirmpasswordField);
 
+        centerPanel.add(createLabel(""));
+
+        JPanel combines = new JPanel();
+        combines.setBackground(bgColor);
+
+        show = checkButton("Show");
+        combines.add(show);
+
+        hide = checkButton("Hide");
+        combines.add(hide);
+
+        ButtonGroup groupie = new ButtonGroup();
+        groupie.add(hide);
+        groupie.add(show);
+
+        hide.addItemListener(this);
+        show.addItemListener(this);
+
+        centerPanel.add(combines);
+
         male = checkButton("male");
         female = checkButton("female");
 
@@ -107,6 +127,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
         female.addItemListener(this);
 
         male.setSelected(true);
+        hide.setSelected(true);
 
         JPanel southPanel = new JPanel();
         southPanel.setBackground(Color.BLUE);
@@ -182,7 +203,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
 
     boolean checkpass(String word) {
 
-        String vowels = "_@&0123456789";
+        String vowels = "_@&0123456789~!@#$%^&*()_+=-/.,><|][{}]";
         for (char letter : word.toCharArray()) {
             if (vowels.contains(letter + "")) {
                 result = true;
@@ -236,6 +257,12 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
                 return;
             }
 
+            if (checkpass(firstnameField.getText()) && checkpass(lastNameField.getText())) {
+                JOptionPane.showMessageDialog(null, "Names Contains Only Letters!");
+                return;
+
+            }
+
             Boolean res = Pattern.matches("(0||\\+234)[7-9][01]\\d{8}", Phone_Number.getText());
             if (res == false) {
                 JOptionPane.showMessageDialog(null, "INCORRECT PHONE NUMBER!");
@@ -253,7 +280,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
                 return;
             }
             if (!checkpass(passwordField.getText()) && !checkpass(ConfirmpasswordField.getText())) {
-                JOptionPane.showMessageDialog(null, "Hint: Must Contain Either(_,@,& or number)");
+                JOptionPane.showMessageDialog(null, "Hint: Must Contain Symbools Or Number)");
                 return;
             }
             String selectIntoTable1 = String.format("SELECT * FROM identity");
@@ -308,10 +335,19 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
     public void itemStateChanged(ItemEvent e) {
         if (male.isSelected()) {
             status = "male";
-        } else if (female.isSelected()) {
+        }
+        if (female.isSelected()) {
             status = "Female";
-        } else {
-            status = null;
+        }
+        if (show.isSelected()) {
+            passwordField.setEchoChar((char) 0);
+            ConfirmpasswordField.setEchoChar((char) 0);
+
+        }
+        if (hide.isSelected()) {
+            passwordField.setEchoChar('*');
+            ConfirmpasswordField.setEchoChar('*');
+
         }
     }
 
@@ -326,7 +362,7 @@ public class PortalSignup extends JFrame implements ActionListener, ItemListener
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            new portallogin();
+            new portallogin(st2);
         } else {
             System.out.println("GUI TERMINATED!");
         }

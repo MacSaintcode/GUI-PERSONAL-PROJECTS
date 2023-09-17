@@ -33,10 +33,9 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     JButton submit, reset;
     JRadioButton male, female;
     String tick = "", Gender = "Male", regnum;
+    boolean result;
 
     public Statement st2 = Practice_Connector.createStatement();
-
-
 
     public Input_Practice() {
 
@@ -147,6 +146,17 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
         return btnr;
     }
 
+    boolean checkpass(String word) {
+
+        String vowels = "_@&0123456789~!@#$%^&*()_+=-/.,><|][{}]";
+        for (char letter : word.toCharArray()) {
+            if (vowels.contains(letter + "")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     @Override
     public void itemStateChanged(ItemEvent ea) {
         if (male.isSelected()) {
@@ -176,9 +186,17 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                 JOptionPane.showMessageDialog(null, "FIELD CANNOT BE EMPTY!");
                 return;
             }
+            if (checkpass(firstnamefield.getText()) && checkpass(lastnamefield.getText())) {
+                JOptionPane.showMessageDialog(null, "Names Contains Only Letters!");
+                return;
+
+            }
 
             if (Other_Names.getText().isEmpty()) {
                 Other_Names.setText(null);
+            } else if (checkpass(Other_Names.getText())) {
+                JOptionPane.showMessageDialog(null, "Names Contains Only Letters!");
+                return;
             }
 
             Boolean res = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", Date_Of_Birth.getText());
@@ -223,7 +241,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
                     Reg_num.getText());
 
             try {
-                st2.execute(InputQuery); 
+                st2.execute(InputQuery);
                 System.out.println("Query Executed Sucessfully");
                 regnum = Reg_num.getText();
                 firstnamefield.setText("");
@@ -261,7 +279,7 @@ public class Input_Practice extends JFrame implements ActionListener, ItemListen
     public void windowClosed(WindowEvent e) {
         if (tick.equalsIgnoreCase("done")) {
 
-            new EnterPassword(regnum,st2);
+            new EnterPassword(regnum, st2);
         } else {
             System.err.println("GUI TERMINATED!");
         }

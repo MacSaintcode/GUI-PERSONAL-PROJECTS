@@ -1,11 +1,13 @@
 package DBdata;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
@@ -14,29 +16,28 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-class changepassconfirm extends JFrame implements ActionListener, WindowListener {
+class changepassconfirm extends JFrame implements ActionListener, WindowListener, ItemListener {
     Color fgcolor = Color.YELLOW, bgcolor = Color.BLACK;
     Font font = new Font("Comic sans", Font.BOLD, 30);
     JPasswordField Password, cPassword;
+    JRadioButton show, hide;
     JButton submit, reset;
     String tick = "", User, phone;
     boolean result;
     Statement st2;
 
-    changepassconfirm(Statement st2) {
-
-    }
-
-    changepassconfirm(String use, String pho) {
+    changepassconfirm(String use, String pho, Statement st) {
         User = use;
         phone = pho;
-        st2 = Practice_Connector.createStatement();
+        st2 = st;
         GridLayout gl = new GridLayout(4, 1);
         JPanel centerpanel = new JPanel();
         centerpanel.setFont(font);
@@ -54,6 +55,24 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
         centerpanel.add(createlabel("Confirm Password"));
         cPassword = createpassfield();
         centerpanel.add(cPassword);
+        JPanel combines = new JPanel();
+        combines.setBackground(bgcolor);
+        centerpanel.add(createlabel(""));
+
+        show = checkButton("Show");
+        combines.add(show);
+
+        hide = checkButton("Hide");
+        combines.add(hide);
+
+        ButtonGroup groupie = new ButtonGroup();
+        groupie.add(hide);
+        groupie.add(show);
+
+        hide.addItemListener(this);
+        show.addItemListener(this);
+        centerpanel.add(combines);
+        hide.setSelected(true);
 
         JPanel southpanel = new JPanel();
         southpanel.setBackground(Color.DARK_GRAY);
@@ -74,6 +93,15 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
         setLocationRelativeTo(null);
         setVisible(true);
 
+    }
+
+    private JRadioButton checkButton(String txt) {
+        JRadioButton btn = new JRadioButton(txt);
+        btn.setForeground(fgcolor);
+        btn.setBackground(bgcolor);
+        btn.setFont(font);
+        btn.setFont(font);
+        return btn;
     }
 
     JPasswordField createpassfield() {
@@ -106,13 +134,25 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
 
     boolean checkpass(String word) {
 
-        String vowels = "_@&0123456789";
+        String vowels = "_@&0123456789~!@#$%^&*()_+=-/.,><|][{}]";
         for (char letter : word.toCharArray()) {
             if (vowels.contains(letter + "")) {
                 result = true;
             }
         }
         return result;
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (show.isSelected()) {
+            Password.setEchoChar((char) 0);
+            cPassword.setEchoChar((char) 0);
+        }
+        if (hide.isSelected()) {
+            cPassword.setEchoChar('*');
+            Password.setEchoChar('*');
+        }
     }
 
     @Override
@@ -140,17 +180,18 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
                 return;
             }
             if (!checkpass(Password.getText()) && !checkpass(cPassword.getText())) {
-                JOptionPane.showMessageDialog(null, "hint: Must Contain Either(_,@,& or number)");
+                JOptionPane.showMessageDialog(null, "hint: Must Contain Symbools Or Number");
                 return;
 
             }
             String selectIntoTable2 = String.format(
-                    "Update Administrative set password='%s' where Phone_Number='%s'and Username='%s' ",
+                    "Update administrative set password='%s' where Phone_Number='%s'and Username='%s' ",
                     Password.getText(),
                     phone, User);
             try {
                 st2.execute(selectIntoTable2);
                 JOptionPane.showMessageDialog(null, "PASSWORD CHANGED!");
+                tick="done";
                 dispose();
 
             } catch (SQLException sq) {
@@ -170,11 +211,11 @@ class changepassconfirm extends JFrame implements ActionListener, WindowListener
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
             System.err.println("Password Changed!");
-            JOptionPane.showMessageDialog(null, "Password Change Sucessful!");
-            new login();
+            new login(st2);
         } else {
+             JOptionPane.showMessageDialog(null, "PASSWORD UNCHANGED!");
             System.err.println("Password Unchanged!");
-            new login();
+            new login(st2);
         }
 
     }

@@ -1,5 +1,6 @@
 package DBdata;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -8,9 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Statement;
@@ -24,13 +28,14 @@ import java.awt.GridLayout;
 
 import java.sql.Connection;
 
-public class login extends JFrame implements ActionListener, WindowListener {
+public class login extends JFrame implements ActionListener, WindowListener, ItemListener {
 
 	Color fgColor = Color.YELLOW, bgColor = Color.BLACK;
 	Font font;
 
 	JTextField userNameField;
 	JPasswordField passwordField;
+	JRadioButton show, hide;
 	JButton submit, clear, Forgot, create;
 	String tick = "";
 	Statement st2;
@@ -48,10 +53,28 @@ public class login extends JFrame implements ActionListener, WindowListener {
 		centerPanel.add(createLabel("User Name"));
 		userNameField = createTextField();
 		centerPanel.add(userNameField);
+		
+		JPanel combines = new JPanel();
+		combines.setBackground(bgColor);
+
+		show = checkButton("Show");
+		combines.add(show);
+
+		hide = checkButton("Hide");
+		combines.add(hide);
+
+		ButtonGroup groupie = new ButtonGroup();
+		groupie.add(hide);
+		groupie.add(show);
+
+		hide.addItemListener(this);
+		show.addItemListener(this);
 
 		centerPanel.add(createLabel("Password"));
 		passwordField = createPasswordField();
 		centerPanel.add(passwordField);
+		centerPanel.add(combines);
+		hide.setSelected(true);
 
 		JPanel southPanel = new JPanel();
 		southPanel.setBackground(Color.BLUE);
@@ -77,6 +100,15 @@ public class login extends JFrame implements ActionListener, WindowListener {
 		setSize(821, 450);
 		setLocationRelativeTo(null);
 
+	}
+
+	private JRadioButton checkButton(String txt) {
+		JRadioButton btn = new JRadioButton(txt);
+		btn.setForeground(fgColor);
+		btn.setBackground(bgColor);
+		btn.setFont(font);
+		btn.setFont(font);
+		return btn;
 	}
 
 	private JButton createButton(String txt) {
@@ -222,6 +254,16 @@ public class login extends JFrame implements ActionListener, WindowListener {
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (show.isSelected()) {
+			passwordField.setEchoChar((char) 0);
+		}
+		if (hide.isSelected()) {
+			passwordField.setEchoChar('*');
+		}
 	}
 
 }

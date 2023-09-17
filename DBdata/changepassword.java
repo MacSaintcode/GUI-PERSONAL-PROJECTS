@@ -26,11 +26,11 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     Font font = new Font("Comic sans", Font.BOLD, 30);
     JTextField Phone_Number, Username;
     JButton submit, reset;
-    String tick = "", User, phone;
+    String tick = "", User, phone,from="admin";
     Statement st2;
 
-    changepassword() {
-        st2 = Practice_Connector.createStatement();
+    changepassword(Statement st) {
+        st2 = st;
         GridLayout gl = new GridLayout(4, 1);
         JPanel centerpanel = new JPanel();
         centerpanel.setFont(font);
@@ -173,11 +173,11 @@ public class changepassword extends JFrame implements ActionListener, WindowList
     @Override
     public void windowClosed(WindowEvent arg0) {
         if (tick.equalsIgnoreCase("done")) {
-            PinEntry call = new PinEntry(User, phone);
+            PinEntry call = new PinEntry(User, phone, st2,from);
 
         } else {
             System.err.println("Password Unchanged!");
-            new login();
+            new login(st2);
         }
 
     }
